@@ -2,25 +2,11 @@ package org.liuzhugu.javastudy.practice.work;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.codec.binary.Base64;
-import org.bouncycastle.crypto.BlockCipher;
-import org.bouncycastle.crypto.BufferedBlockCipher;
-import org.bouncycastle.crypto.CipherParameters;
-import org.bouncycastle.crypto.engines.AESEngine;
-import org.bouncycastle.crypto.engines.RijndaelEngine;
-import org.bouncycastle.crypto.modes.CBCBlockCipher;
-import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
-import org.bouncycastle.crypto.paddings.ZeroBytePadding;
-import org.bouncycastle.crypto.params.KeyParameter;
-import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.Charset;
-import java.security.SecureRandom;
 import java.security.Security;
 import java.util.*;
 
@@ -28,6 +14,7 @@ public class Test {
     public static void main(String[] args) {
         Test en = new Test();
         try {
+            //测试加密
             Map<String, String> map = new HashMap<String, String>();
             map.put("order_id", "25415852018092510514118");
             String jsonObject = JSONObject.toJSONString(map);
