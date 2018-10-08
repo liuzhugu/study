@@ -31,19 +31,31 @@ public class NettyClient {
         NioEventLoopGroup workerGroup=new NioEventLoopGroup();
 
         bootstrap
+                // 1.指定线程模型
                 .group(workerGroup)
+                // 2.指定 IO 类型为 NIO
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .option(ChannelOption.TCP_NODELAY, true)
+                // 3.IO 处理逻辑
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch){
-                        //ch.pipeline().addLast(new FirstClientHandler());
+                        // 指定连接数据读写逻辑
+                        //责任链模式.通过责任链，在不同步骤上进行不同处理，不同环节的handle可以灵活替换，只有参数配的环才会处理
+                        // 处理完又会把结果传给下一环，然后读取数据和写数据都会经过责任链上的环环处理
+                        // 当然一些handle比如登陆处理部分，只在第一次时需要执行，那么执行成功之后就可以把这个handle去掉了
+                        // 避免后面每一次执行通过经过它，从而实现handle的热插拔
+
+                        //自定义解析拆包实现
                         ch.pipeline().addLast(new Spliter());
+                        //编码
                         ch.pipeline().addLast(new PacketDecoder());
+                        //如果是登陆请求，在login中的channelRead0里参数类型配,如果是信息才会在message中匹配参数
                         ch.pipeline().addLast(new LoginResponseHandle());
                         ch.pipeline().addLast(new MessageResponseHandle());
+                        //解码
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
@@ -52,6 +64,7 @@ public class NettyClient {
         connect(bootstrap,HOST,PORT,MAX_RETRY);
     }
 
+    //连接失败后，等待一段时间继续重连，每次失败后等待时间延长
     private static void connect(Bootstrap bootstrap, String host, int port, int retry) {
         bootstrap.connect(host, port).addListener(future -> {
             if (future.isSuccess()) {
@@ -75,13 +88,12 @@ public class NettyClient {
     private static void startConsoleThread(Channel channel) {
         new Thread(() -> {
             while (!Thread.interrupted()) {
-                //if (LoginUtil.hasLogin(channel)) {
-                    System.out.println("输入消息发送至服务端: ");
-                    Scanner sc = new Scanner(System.in);
-                    String line = sc.nextLine();
+                //从控制台获取信息发送到服务端
+                System.out.println("输入消息发送至服务端: ");
+                Scanner sc = new Scanner(System.in);
+                String line = sc.nextLine();
 
-                    channel.writeAndFlush(new MessageRequestPacket(line));
-                //}
+                channel.writeAndFlush(new MessageRequestPacket(line));
             }
         }).start();
     }

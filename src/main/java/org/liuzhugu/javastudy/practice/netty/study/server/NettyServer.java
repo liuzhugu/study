@@ -35,10 +35,10 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch){
-                        //ch.pipeline().addLast(new FirstServerHandler());
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
+                        //AuthHandler中覆写的是channelRead，处理任何类型参数
                         ch.pipeline().addLast(new AuthHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
@@ -54,6 +54,8 @@ public class NettyServer {
                 System.out.println(new Date() + ": 端口[" + port + "]绑定成功!");
             } else {
                 System.err.println("端口[" + port + "]绑定失败!");
+                //绑定失败后，继续绑端口号+1
+                bind(serverBootstrap, PORT+1);
             }
         });
     }

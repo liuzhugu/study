@@ -40,25 +40,7 @@ public class PacketCodeC {
 
     }
 
-//    public ByteBuf encode(ByteBufAllocator allocator,Packet packet){
-//        // 1. 创建 ByteBuf 对象
-//        ByteBuf byteBuf = allocator.ioBuffer();
-//        // 2. 序列化 java 对象
-//        byte[] bytes = Serializer.DEFAULT.serialize(packet);
-//
-//
-//        //依次组装数据包,顺序:魔数-版本-算法-指令-长度-数据
-//        //其中算法和指令可以灵活替换，算法决定序列化方法，指令决定序列化对象类型
-//        byteBuf.writeInt(MAGIC_NUMBER);
-//        byteBuf.writeByte(packet.getVersion());
-//        byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlogrithm());
-//        byteBuf.writeByte(packet.getCommand());
-//        byteBuf.writeInt(bytes.length);
-//        byteBuf.writeBytes(bytes);
-//
-//        return byteBuf;
-//    }
-
+    //序列化
     public void encode(ByteBuf byteBuf,Packet packet){
 
         // 1. 序列化 java 对象
@@ -75,6 +57,7 @@ public class PacketCodeC {
         byteBuf.writeBytes(bytes);
     }
 
+    //反序列化
     public Packet decode(ByteBuf byteBuf){
         //跳过魔数
         byteBuf.skipBytes(4);
@@ -99,6 +82,7 @@ public class PacketCodeC {
         Class<? extends Packet> requestType=getRequestType(command);
         Serializer serializer=getSerializer(serializeAlgorithm);
         if(requestType!=null&&serializer!=null){
+            //反序列化
             return serializer.deserialize(requestType,bytes);
         }
         return null;
