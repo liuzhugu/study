@@ -1,8 +1,6 @@
 package org.liuzhugu.javastudy.practice.za;
 
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Random;
+
 
 public class ClassLoaderStudy {
 
@@ -16,19 +14,8 @@ public class ClassLoaderStudy {
 //        Class<?> y=ClassLoader.getSystemClassLoader().loadClass("[I");
 //        System.out.println(y);
 
-        System.out.println(getVirtualPassportNo());
 
 
     }
-    private static String getVirtualPassportNo(){
-        //E开头,然后是随机八位数字
-        StringBuilder virtualPassportNo=new StringBuilder("E");
-        Random random=new Random();
-        for(int i=0;i<8;i++){
-            virtualPassportNo.append(random.nextInt(10));
-        }
-        return virtualPassportNo.toString();
-    }
-
 
 }
