@@ -8,7 +8,13 @@ import static org.liuzhugu.javastudy.practice.netty.study.protocol.command.Comma
 @Data
 public class MessageResponsePacket extends Packet {
 
+    private int fromUserId;
+
+    private String fromUserName;
+
     private String message;
+
+    private String timeStamp;
 
     @Override
     public Byte getCommand(){

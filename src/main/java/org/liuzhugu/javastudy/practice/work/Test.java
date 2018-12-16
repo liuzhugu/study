@@ -1,11 +1,14 @@
 package org.liuzhugu.javastudy.practice.work;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Test {
     public static void main(String[] args) throws Exception{
-       String string=null;
-       string.equals("");
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String timeStamp = simpleDateFormat.format(new Date()).toString();
+        System.out.println(timeStamp);
     }
 
 

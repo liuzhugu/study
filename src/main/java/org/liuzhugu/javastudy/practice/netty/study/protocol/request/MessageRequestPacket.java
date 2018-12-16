@@ -7,10 +7,18 @@ import static org.liuzhugu.javastudy.practice.netty.study.protocol.command.Comma
 @Data
 public class MessageRequestPacket extends Packet{
 
+    private String toUserId;
+
     private String message;
 
-    public MessageRequestPacket(String message) {
+    private String timeStamp;
+
+    public MessageRequestPacket(){}
+
+    public MessageRequestPacket(String toUserId, String message, String timeStamp) {
+        this.toUserId = toUserId;
         this.message = message;
+        this.timeStamp = timeStamp;
     }
 
     @Override

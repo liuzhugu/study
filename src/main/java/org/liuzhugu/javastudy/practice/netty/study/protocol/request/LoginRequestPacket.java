@@ -8,7 +8,7 @@ import static org.liuzhugu.javastudy.practice.netty.study.protocol.command.Comma
 @Data
 public class LoginRequestPacket extends Packet {
 
-    private String userId;
+    private int userId;
 
     private String username;
 
