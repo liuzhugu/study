@@ -49,14 +49,14 @@ public class NettyServer {
 
     }
     private static void bind(final ServerBootstrap serverBootstrap, final int port) {
-//        serverBootstrap.bind(port).addListener(future -> {
-//            if (future.isSuccess()) {
-//                System.out.println(new Date() + ": 端口[" + port + "]绑定成功!");
-//            } else {
-//                System.err.println("端口[" + port + "]绑定失败!");
-//                //绑定失败后，继续绑端口号+1
-//                bind(serverBootstrap, PORT+1);
-//            }
-//        });
+        serverBootstrap.bind(port).addListener(future -> {
+            if (future.isSuccess()) {
+                System.out.println(new Date() + ": 端口[" + port + "]绑定成功!");
+            } else {
+                System.err.println("端口[" + port + "]绑定失败!");
+                //绑定失败后，继续绑端口号+1
+                bind(serverBootstrap, PORT+1);
+            }
+        });
     }
 }

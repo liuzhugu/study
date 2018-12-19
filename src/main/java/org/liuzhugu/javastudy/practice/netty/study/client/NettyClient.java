@@ -8,12 +8,16 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import org.liuzhugu.javastudy.practice.netty.client.handle.LoginResponseHandle;
-import org.liuzhugu.javastudy.practice.netty.client.handle.MessageResponseHandle;
-import org.liuzhugu.javastudy.practice.netty.protocol.PacketDecoder;
-import org.liuzhugu.javastudy.practice.netty.protocol.PacketEncoder;
-import org.liuzhugu.javastudy.practice.netty.protocol.Spliter;
+import org.liuzhugu.javastudy.practice.netty.study.client.handle.LoginResponseHandle;
+import org.liuzhugu.javastudy.practice.netty.study.client.handle.MessageResponseHandle;
+import org.liuzhugu.javastudy.practice.netty.study.protocol.PacketDecoder;
+import org.liuzhugu.javastudy.practice.netty.study.protocol.PacketEncoder;
+import org.liuzhugu.javastudy.practice.netty.study.protocol.Spliter;
+import org.liuzhugu.javastudy.practice.netty.study.protocol.request.LoginRequestPacket;
+import org.liuzhugu.javastudy.practice.netty.study.protocol.request.MessageRequestPacket;
+import org.liuzhugu.javastudy.practice.netty.study.util.SessionUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -65,35 +69,57 @@ public class NettyClient {
 
     //连接失败后，等待一段时间继续重连，每次失败后等待时间延长
     private static void connect(Bootstrap bootstrap, String host, int port, int retry) {
-//        bootstrap.connect(host, port).addListener(future -> {
-//            if (future.isSuccess()) {
-//                System.out.println(new Date() + ": 连接成功，启动控制台线程……");
-//                Channel channel = ((ChannelFuture) future).channel();
-//                startConsoleThread(channel);
-//            } else if (retry == 0) {
-//                System.err.println("重试次数已用完，放弃连接！");
-//            } else {
-//                // 第几次重连
-//                int order = (MAX_RETRY - retry) + 1;
-//                // 本次重连的间隔
-//                int delay = 1 << order;
-//                System.err.println(new Date() + ": 连接失败，第" + order + "次重连……");
-//                bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, retry - 1), delay, TimeUnit
-//                        .SECONDS);
-//            }
-//        });
+        bootstrap.connect(host, port).addListener(future -> {
+            if (future.isSuccess()) {
+                System.out.println(new Date() + ": 连接成功，启动控制台线程……");
+                Channel channel = ((ChannelFuture) future).channel();
+                startConsoleThread(channel);
+            } else if (retry == 0) {
+                System.err.println("重试次数已用完，放弃连接！");
+            } else {
+                // 第几次重连
+                int order = (MAX_RETRY - retry) + 1;
+                // 本次重连的间隔
+                int delay = 1 << order;
+                System.err.println(new Date() + ": 连接失败，第" + order + "次重连……");
+                bootstrap.config().group().schedule(() -> connect(bootstrap, host, port, retry - 1), delay, TimeUnit
+                        .SECONDS);
+            }
+        });
     }
 
     private static void startConsoleThread(Channel channel) {
-//        new Thread(() -> {
-//            while (!Thread.interrupted()) {
-//                //从控制台获取信息发送到服务端
-//                System.out.println("输入消息发送至服务端: ");
-//                Scanner sc = new Scanner(System.in);
-//                String line = sc.nextLine();
-//
-//                channel.writeAndFlush(new MessageRequestPacket(line));
-//            }
-//        }).start();
+        Scanner sc=new Scanner(System.in);
+        LoginRequestPacket loginRequestPacket=new LoginRequestPacket();
+
+        new Thread(() -> {
+            while (!Thread.interrupted()) {
+                if(!SessionUtil.hasLogin(channel)){
+                    System.out.print("请输入用户名登录: ");
+                    String userName = sc.nextLine();
+                    loginRequestPacket.setUsername(userName);
+                    loginRequestPacket.setPassword("pwd");
+
+                    //登录
+                    channel.writeAndFlush(loginRequestPacket);
+                    waitForLoginResponse();
+                }else {
+                    //从控制台获取信息发送到服务端
+                    String userId = sc.next();
+                    String message = sc.next();
+                    SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String timeStamp = simpleDateFormat.format(new Date()).toString();
+
+                    channel.writeAndFlush(new MessageRequestPacket(userId,message,timeStamp));
+                }
+            }
+        }).start();
+    }
+
+    private static void waitForLoginResponse() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ignored) {
+        }
     }
 }
