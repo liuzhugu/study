@@ -8,7 +8,11 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.liuzhugu.javastudy.practice.netty.study.client.console.ConsoleCommandManager;
+import org.liuzhugu.javastudy.practice.netty.study.client.console.LoginConsoleCommand;
+import org.liuzhugu.javastudy.practice.netty.study.client.handle.CreateGroupResponseHandle;
 import org.liuzhugu.javastudy.practice.netty.study.client.handle.LoginResponseHandle;
+import org.liuzhugu.javastudy.practice.netty.study.client.handle.LogoutResponseHandle;
 import org.liuzhugu.javastudy.practice.netty.study.client.handle.MessageResponseHandle;
 import org.liuzhugu.javastudy.practice.netty.study.protocol.PacketDecoder;
 import org.liuzhugu.javastudy.practice.netty.study.protocol.PacketEncoder;
@@ -57,7 +61,10 @@ public class NettyClient {
                         ch.pipeline().addLast(new PacketDecoder());
                         //如果是登陆请求，在login中的channelRead0里参数类型配,如果是信息才会在message中匹配参数
                         ch.pipeline().addLast(new LoginResponseHandle());
+                        //创建群组命令处理
+                        ch.pipeline().addLast(new CreateGroupResponseHandle());
                         ch.pipeline().addLast(new MessageResponseHandle());
+                        ch.pipeline().addLast(new LogoutResponseHandle());
                         //解码
                         ch.pipeline().addLast(new PacketEncoder());
                     }
@@ -90,27 +97,15 @@ public class NettyClient {
 
     private static void startConsoleThread(Channel channel) {
         Scanner sc=new Scanner(System.in);
-        LoginRequestPacket loginRequestPacket=new LoginRequestPacket();
+        LoginConsoleCommand loginConsoleCommand=new LoginConsoleCommand();
+        ConsoleCommandManager consoleCommandManager=new ConsoleCommandManager();
 
         new Thread(() -> {
             while (!Thread.interrupted()) {
                 if(!SessionUtil.hasLogin(channel)){
-                    System.out.print("请输入用户名登录: ");
-                    String userName = sc.nextLine();
-                    loginRequestPacket.setUsername(userName);
-                    loginRequestPacket.setPassword("pwd");
-
-                    //登录
-                    channel.writeAndFlush(loginRequestPacket);
-                    waitForLoginResponse();
+                    loginConsoleCommand.exec(sc,channel);
                 }else {
-                    //从控制台获取信息发送到服务端
-                    String userId = sc.next();
-                    String message = sc.next();
-                    SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String timeStamp = simpleDateFormat.format(new Date()).toString();
-
-                    channel.writeAndFlush(new MessageRequestPacket(userId,message,timeStamp));
+                    consoleCommandManager.exec(sc,channel);
                 }
             }
         }).start();

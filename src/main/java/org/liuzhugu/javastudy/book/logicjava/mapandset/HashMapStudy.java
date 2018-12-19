@@ -52,7 +52,7 @@ public class HashMapStudy {
         //count();
 
         //HashMap的key可以为null
-//        HashMap<Integer,Integer> hashMap=new HashMap<>();
+//        HashMap_<Integer,Integer> hashMap=new HashMap_<>();
 //        hashMap.put(null,1);
 //        System.out.println(hashMap.get(null));
         //Hashtable的key不可以为null

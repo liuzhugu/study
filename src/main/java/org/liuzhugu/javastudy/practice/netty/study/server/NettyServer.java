@@ -9,9 +9,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.liuzhugu.javastudy.practice.netty.study.protocol.PacketDecoder;
 import org.liuzhugu.javastudy.practice.netty.study.protocol.PacketEncoder;
 import org.liuzhugu.javastudy.practice.netty.study.protocol.Spliter;
-import org.liuzhugu.javastudy.practice.netty.study.server.handle.AuthHandler;
-import org.liuzhugu.javastudy.practice.netty.study.server.handle.LoginRequestHandler;
-import org.liuzhugu.javastudy.practice.netty.study.server.handle.MessageRequestHandler;
+import org.liuzhugu.javastudy.practice.netty.study.server.handle.*;
 
 import java.util.Date;
 
@@ -40,8 +38,10 @@ public class NettyServer {
                         ch.pipeline().addLast(new LoginRequestHandler());
                         //AuthHandler中覆写的是channelRead，处理任何类型参数
                         ch.pipeline().addLast(new AuthHandler());
+                        ch.pipeline().addLast(new CreateGroupRequestHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
+                        ch.pipeline().addLast(new LogoutRequestHandler());
                     }
                 });
 

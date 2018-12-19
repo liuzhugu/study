@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 
-public abstract class AbstractCollectionS<E> implements Collection<E> {
+public abstract class AbstractCollection_<E> implements Collection<E> {
 
 
-    protected AbstractCollectionS() {
+    protected AbstractCollection_() {
     }
 
     // Query Operations

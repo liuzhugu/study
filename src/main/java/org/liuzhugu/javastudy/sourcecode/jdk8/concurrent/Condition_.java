@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 
-public interface ConditionS {
+public interface Condition_ {
 
     void await() throws InterruptedException;
 

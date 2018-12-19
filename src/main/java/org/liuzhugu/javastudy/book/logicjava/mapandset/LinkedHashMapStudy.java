@@ -1,9 +1,5 @@
 package org.liuzhugu.javastudy.book.logicjava.mapandset;
 
-import org.liuzhugu.javastudy.sourcecode.jdk8.container.HashMapS;
-import org.liuzhugu.javastudy.sourcecode.jdk8.container.LinkedHashMapS;
-import org.liuzhugu.javastudy.sourcecode.jdk8.container.MapS;
-
 
 public class LinkedHashMapStudy {
     //内部有一个双向链表
@@ -11,7 +7,7 @@ public class LinkedHashMapStudy {
     public static void main(String[] args){
 
         //比hashmap多了顺序功能,可以把所有节点按访问顺序串成双向链表,遍历的时候会体现这种顺序
-//        MapS<String,Integer> linkedHashMap=new LinkedHashMapS<>(16,0.75f,false);
+//        Map_<String,Integer> linkedHashMap=new LinkedHashMap_<>(16,0.75f,false);
 //        linkedHashMap.put("a",100);
 //        linkedHashMap.put("c",200);
 //        linkedHashMap.put("b",300);
@@ -20,7 +16,7 @@ public class LinkedHashMapStudy {
 //        linkedHashMap.get("b");
 //        linkedHashMap.get("c");
 //        linkedHashMap.get("d");
-//        for(HashMapS.Entry entry:linkedHashMap.entrySet()){
+//        for(HashMap_.Entry entry:linkedHashMap.entrySet()){
 //            System.out.println(entry.getKey()+" "+entry.getValue());
 //        }
 

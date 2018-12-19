@@ -9,7 +9,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public interface MapS<K,V>{
+public interface Map_<K,V>{
     // Query Operations
 
     /**
@@ -152,7 +152,7 @@ public interface MapS<K,V>{
      * @throws IllegalArgumentException if some property of a key or value in
      *         the specified map prevents it from being stored in this map
      */
-    void putAll(MapS<? extends K, ? extends V> m);
+    void putAll(Map_<? extends K, ? extends V> m);
 
     /**
      * Removes all of the mappings from this map (optional operation).
@@ -167,13 +167,13 @@ public interface MapS<K,V>{
     // Views
 
 
-    SetS<K> keySet();
+    Set_<K> keySet();
 
 
     Collection<V> values();
 
 
-    SetS<Entry<K, V>> entrySet();
+    Set_<Entry<K, V>> entrySet();
 
     interface Entry<K,V> {
         /**
@@ -259,28 +259,28 @@ public interface MapS<K,V>{
         int hashCode();
 
 
-        public static <K extends Comparable<? super K>, V> Comparator<MapS.Entry<K,V>> comparingByKey() {
+        public static <K extends Comparable<? super K>, V> Comparator<Map_.Entry<K,V>> comparingByKey() {
             return (Comparator<Entry<K, V>> & Serializable)
                     (c1, c2) -> c1.getKey().compareTo(c2.getKey());
         }
 
 
-        public static <K, V extends Comparable<? super V>> Comparator<MapS.Entry<K,V>> comparingByValue() {
-            return (Comparator<MapS.Entry<K, V>> & Serializable)
+        public static <K, V extends Comparable<? super V>> Comparator<Map_.Entry<K,V>> comparingByValue() {
+            return (Comparator<Map_.Entry<K, V>> & Serializable)
                     (c1, c2) -> c1.getValue().compareTo(c2.getValue());
         }
 
 
-        public static <K, V> Comparator<MapS.Entry<K, V>> comparingByKey(Comparator<? super K> cmp) {
+        public static <K, V> Comparator<Map_.Entry<K, V>> comparingByKey(Comparator<? super K> cmp) {
             Objects.requireNonNull(cmp);
-            return (Comparator<MapS.Entry<K, V>> & Serializable)
+            return (Comparator<Map_.Entry<K, V>> & Serializable)
                     (c1, c2) -> cmp.compare(c1.getKey(), c2.getKey());
         }
 
 
-        public static <K, V> Comparator<MapS.Entry<K, V>> comparingByValue(Comparator<? super V> cmp) {
+        public static <K, V> Comparator<Map_.Entry<K, V>> comparingByValue(Comparator<? super V> cmp) {
             Objects.requireNonNull(cmp);
-            return (Comparator<MapS.Entry<K, V>> & Serializable)
+            return (Comparator<Map_.Entry<K, V>> & Serializable)
                     (c1, c2) -> cmp.compare(c1.getValue(), c2.getValue());
         }
     }
@@ -314,7 +314,7 @@ public interface MapS<K,V>{
     //遍历
     default void forEach(BiConsumer<? super K, ? super V> action) {
         Objects.requireNonNull(action);
-        for (MapS.Entry<K, V> entry : entrySet()) {
+        for (Map_.Entry<K, V> entry : entrySet()) {
             K k;
             V v;
             try {
@@ -331,7 +331,7 @@ public interface MapS<K,V>{
 
     default void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) {
         Objects.requireNonNull(function);
-        for (MapS.Entry<K, V> entry : entrySet()) {
+        for (Map_.Entry<K, V> entry : entrySet()) {
             K k;
             V v;
             try {
