@@ -10,14 +10,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.*;
 
 
-public abstract class AbstractQueuedSynchronizerS
+public abstract class AbstractQueuedSynchronizer_
     extends AbstractOwnableSynchronizer
     implements java.io.Serializable {
 
     private static final long serialVersionUID = 7373984972572414691L;
 
 
-    protected AbstractQueuedSynchronizerS() { }
+    protected AbstractQueuedSynchronizer_() { }
 
 
     static final class Node {
@@ -709,7 +709,7 @@ public abstract class AbstractQueuedSynchronizerS
     }
 
 
-    public class ConditionObject implements ConditionS, java.io.Serializable {
+    public class ConditionObject implements Condition_, java.io.Serializable {
         private static final long serialVersionUID = 1173984872572414699L;
         /** First node of condition queue. */
         private transient Node firstWaiter;
@@ -942,8 +942,8 @@ public abstract class AbstractQueuedSynchronizerS
             return !timedout;
         }
 
-        final boolean isOwnedBy(AbstractQueuedSynchronizerS sync) {
-            return sync == AbstractQueuedSynchronizerS.this;
+        final boolean isOwnedBy(AbstractQueuedSynchronizer_ sync) {
+            return sync == AbstractQueuedSynchronizer_.this;
         }
 
         protected final boolean hasWaiters() {
@@ -995,11 +995,11 @@ public abstract class AbstractQueuedSynchronizerS
     static {
         try {
             stateOffset = unsafe.objectFieldOffset
-                (AbstractQueuedSynchronizerS.class.getDeclaredField("state"));
+                (AbstractQueuedSynchronizer_.class.getDeclaredField("state"));
             headOffset = unsafe.objectFieldOffset
-                (AbstractQueuedSynchronizerS.class.getDeclaredField("head"));
+                (AbstractQueuedSynchronizer_.class.getDeclaredField("head"));
             tailOffset = unsafe.objectFieldOffset
-                (AbstractQueuedSynchronizerS.class.getDeclaredField("tail"));
+                (AbstractQueuedSynchronizer_.class.getDeclaredField("tail"));
             waitStatusOffset = unsafe.objectFieldOffset
                 (Node.class.getDeclaredField("waitStatus"));
             nextOffset = unsafe.objectFieldOffset

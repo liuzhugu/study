@@ -4,7 +4,7 @@ package org.liuzhugu.javastudy.sourcecode.jdk8.concurrent;
 import java.util.concurrent.TimeUnit;
 
 
-public interface LockS {
+public interface Lock_ {
 
     void lock();
 
@@ -16,5 +16,5 @@ public interface LockS {
 
     void unlock();
 
-    ConditionS newCondition();
+    Condition_ newCondition();
 }

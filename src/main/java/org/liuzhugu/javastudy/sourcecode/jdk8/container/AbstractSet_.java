@@ -2,10 +2,10 @@ package org.liuzhugu.javastudy.sourcecode.jdk8.container;
 
 import java.util.*;
 
-public abstract class AbstractSetS<E> extends AbstractCollection<E> implements SetS<E> {
+public abstract class AbstractSet_<E> extends AbstractCollection<E> implements Set_<E> {
 
 
-    protected AbstractSetS() {
+    protected AbstractSet_() {
     }
 
     // Comparison and hashing

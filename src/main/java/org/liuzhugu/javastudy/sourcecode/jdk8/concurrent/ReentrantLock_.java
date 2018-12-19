@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * 5.非公平先直接CAS加锁,失败才执行acquire,并且队列不为空也直接加锁，加锁失败才进入等待队列
  * 6.在前一个线程释放锁之后,如果是非公平的话,新来的线程会比先来的线程多两次抢先加锁的机会,因此会出现先来加锁的线程被后面线程抢先的情况
  * */
-public class ReentrantLockS implements LockS, java.io.Serializable {
+public class ReentrantLock_ implements Lock_, java.io.Serializable {
     private static final long serialVersionUID = 7373984872572414699L;
 
     /**
@@ -37,7 +37,7 @@ public class ReentrantLockS implements LockS, java.io.Serializable {
      * 通过CAS加锁,加锁失败放入AQS
      * AQS是个抽象队列同步器，保存被挂起的线程
      */
-    abstract static class Sync extends AbstractQueuedSynchronizerS {
+    abstract static class Sync extends AbstractQueuedSynchronizer_ {
         private static final long serialVersionUID = -5179523762034025860L;
 
         abstract void lock();
@@ -172,14 +172,14 @@ public class ReentrantLockS implements LockS, java.io.Serializable {
     /**
      * 默认非公平
      * */
-    public ReentrantLockS() {
+    public ReentrantLock_() {
         sync = new NonfairSync();
     }
 
     /**
      * 初始化时设定是否公平
      * */
-    public ReentrantLockS(boolean fair) {
+    public ReentrantLock_(boolean fair) {
         sync = fair ? new FairSync() : new NonfairSync();
     }
 
@@ -206,7 +206,7 @@ public class ReentrantLockS implements LockS, java.io.Serializable {
             throws InterruptedException {
         return sync.tryAcquireNanos(1, unit.toNanos(timeout));
     }
-    public ConditionS newCondition() {
+    public Condition_ newCondition() {
         return sync.newCondition();
     }
 
@@ -246,28 +246,28 @@ public class ReentrantLockS implements LockS, java.io.Serializable {
         return sync.getQueuedThreads();
     }
 
-    public boolean hasWaiters(ConditionS condition) {
+    public boolean hasWaiters(Condition_ condition) {
         if (condition == null)
             throw new NullPointerException();
-        if (!(condition instanceof AbstractQueuedSynchronizerS.ConditionObject))
+        if (!(condition instanceof AbstractQueuedSynchronizer_.ConditionObject))
             throw new IllegalArgumentException("not owner");
-        return sync.hasWaiters((AbstractQueuedSynchronizerS.ConditionObject)condition);
+        return sync.hasWaiters((AbstractQueuedSynchronizer_.ConditionObject)condition);
     }
 
-    public int getWaitQueueLength(ConditionS condition) {
+    public int getWaitQueueLength(Condition_ condition) {
         if (condition == null)
             throw new NullPointerException();
-        if (!(condition instanceof AbstractQueuedSynchronizerS.ConditionObject))
+        if (!(condition instanceof AbstractQueuedSynchronizer_.ConditionObject))
             throw new IllegalArgumentException("not owner");
-        return sync.getWaitQueueLength((AbstractQueuedSynchronizerS.ConditionObject)condition);
+        return sync.getWaitQueueLength((AbstractQueuedSynchronizer_.ConditionObject)condition);
     }
 
-    protected Collection<Thread> getWaitingThreads(ConditionS condition) {
+    protected Collection<Thread> getWaitingThreads(Condition_ condition) {
         if (condition == null)
             throw new NullPointerException();
-        if (!(condition instanceof AbstractQueuedSynchronizerS.ConditionObject))
+        if (!(condition instanceof AbstractQueuedSynchronizer_.ConditionObject))
             throw new IllegalArgumentException("not owner");
-        return sync.getWaitingThreads((AbstractQueuedSynchronizerS.ConditionObject)condition);
+        return sync.getWaitingThreads((AbstractQueuedSynchronizer_.ConditionObject)condition);
     }
 
     public String toString() {

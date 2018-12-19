@@ -33,7 +33,7 @@ public class SessionUtil {
         return channel.attr(Attributes.SESSION).get();
     }
 
-    public static Channel getChannel(String userId){
+    public static Channel getChannel(Integer userId){
         return userIdChannelMap.get(userId);
     }
 
