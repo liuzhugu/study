@@ -1,12 +1,12 @@
-package org.liuzhugu.javastudy.practice.netty.study.server.handle;
+package org.liuzhugu.javastudy.practice.netty.server.handle;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import org.liuzhugu.javastudy.practice.netty.study.common.Session;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.request.MessageRequestPacket;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.response.MessageResponsePacket;
-import org.liuzhugu.javastudy.practice.netty.study.util.SessionUtil;
+import org.liuzhugu.javastudy.practice.netty.common.Session;
+import org.liuzhugu.javastudy.practice.netty.protocol.request.MessageRequestPacket;
+import org.liuzhugu.javastudy.practice.netty.protocol.response.MessageResponsePacket;
+import org.liuzhugu.javastudy.practice.netty.util.SessionUtil;
 
 public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRequestPacket> {
 

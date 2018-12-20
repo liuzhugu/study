@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.practice.netty.study.common;
+package org.liuzhugu.javastudy.practice.netty.common;
 
 import lombok.Data;
 

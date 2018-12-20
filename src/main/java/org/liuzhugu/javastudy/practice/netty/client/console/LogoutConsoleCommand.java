@@ -1,8 +1,7 @@
-package org.liuzhugu.javastudy.practice.netty.study.client.console;
+package org.liuzhugu.javastudy.practice.netty.client.console;
 
 import io.netty.channel.Channel;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.request.LogoutRequestPacket;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.response.LogoutResponsePacket;
+import org.liuzhugu.javastudy.practice.netty.protocol.request.LogoutRequestPacket;
 
 import java.util.Scanner;
 

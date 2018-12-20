@@ -1,15 +1,13 @@
-package org.liuzhugu.javastudy.practice.netty.study.server.handle;
+package org.liuzhugu.javastudy.practice.netty.server.handle;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import org.liuzhugu.javastudy.practice.netty.study.common.IdTypeEnum;
-import org.liuzhugu.javastudy.practice.netty.study.common.Session;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.request.LoginRequestPacket;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.response.LoginResponsePacket;
-import org.liuzhugu.javastudy.practice.netty.study.util.DistributedIdUtil;
-import org.liuzhugu.javastudy.practice.netty.study.util.SessionUtil;
-
-import java.util.UUID;
+import org.liuzhugu.javastudy.practice.netty.common.IdTypeEnum;
+import org.liuzhugu.javastudy.practice.netty.common.Session;
+import org.liuzhugu.javastudy.practice.netty.protocol.request.LoginRequestPacket;
+import org.liuzhugu.javastudy.practice.netty.protocol.response.LoginResponsePacket;
+import org.liuzhugu.javastudy.practice.netty.util.DistributedIdUtil;
+import org.liuzhugu.javastudy.practice.netty.util.SessionUtil;
 
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
 

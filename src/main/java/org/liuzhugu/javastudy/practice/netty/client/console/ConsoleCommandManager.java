@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.practice.netty.study.client.console;
+package org.liuzhugu.javastudy.practice.netty.client.console;
 
 import io.netty.channel.Channel;
 

@@ -1,9 +1,9 @@
-package org.liuzhugu.javastudy.practice.netty.study.util;
+package org.liuzhugu.javastudy.practice.netty.util;
 
 
 import io.netty.channel.Channel;
-import org.liuzhugu.javastudy.practice.netty.study.attribute.Attributes;
-import org.liuzhugu.javastudy.practice.netty.study.common.Session;
+import org.liuzhugu.javastudy.practice.netty.attribute.Attributes;
+import org.liuzhugu.javastudy.practice.netty.common.Session;
 
 import java.util.HashMap;
 import java.util.Map;

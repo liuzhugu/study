@@ -1,11 +1,11 @@
-package org.liuzhugu.javastudy.practice.netty.study.protocol.response;
+package org.liuzhugu.javastudy.practice.netty.protocol.response;
 
 import lombok.Data;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.Packet;
+import org.liuzhugu.javastudy.practice.netty.protocol.Packet;
 
 import java.util.List;
 
-import static org.liuzhugu.javastudy.practice.netty.study.protocol.command.Command.CREATE_GROUP_RESPONSE;
+import static org.liuzhugu.javastudy.practice.netty.protocol.command.Command.CREATE_GROUP_RESPONSE;
 @Data
 public class CreateGroupResponsePacket extends Packet{
 

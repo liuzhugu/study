@@ -1,6 +1,6 @@
-package org.liuzhugu.javastudy.practice.netty.study.util;
+package org.liuzhugu.javastudy.practice.netty.util;
 
-import org.liuzhugu.javastudy.practice.netty.study.common.IdTypeEnum;
+import org.liuzhugu.javastudy.practice.netty.common.IdTypeEnum;
 
 import java.util.HashMap;
 import java.util.Map;

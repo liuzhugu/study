@@ -1,10 +1,10 @@
-package org.liuzhugu.javastudy.practice.netty.study.client.handle;
+package org.liuzhugu.javastudy.practice.netty.client.handle;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import org.liuzhugu.javastudy.practice.netty.study.common.Session;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.response.LoginResponsePacket;
-import org.liuzhugu.javastudy.practice.netty.study.util.SessionUtil;
+import org.liuzhugu.javastudy.practice.netty.common.Session;
+import org.liuzhugu.javastudy.practice.netty.protocol.response.LoginResponsePacket;
+import org.liuzhugu.javastudy.practice.netty.util.SessionUtil;
 
 public class LoginResponseHandle extends SimpleChannelInboundHandler<LoginResponsePacket> {
 

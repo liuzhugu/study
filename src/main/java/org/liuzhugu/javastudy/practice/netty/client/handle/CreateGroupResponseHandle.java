@@ -1,9 +1,8 @@
-package org.liuzhugu.javastudy.practice.netty.study.client.handle;
+package org.liuzhugu.javastudy.practice.netty.client.handle;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.response.CreateGroupResponsePacket;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.response.MessageResponsePacket;
+import org.liuzhugu.javastudy.practice.netty.protocol.response.CreateGroupResponsePacket;
 
 public class CreateGroupResponseHandle extends SimpleChannelInboundHandler<CreateGroupResponsePacket> {
 

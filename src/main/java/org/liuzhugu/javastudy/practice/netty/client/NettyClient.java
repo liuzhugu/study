@@ -8,12 +8,16 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.liuzhugu.javastudy.practice.netty.client.console.ConsoleCommandManager;
+import org.liuzhugu.javastudy.practice.netty.client.console.LoginConsoleCommand;
+import org.liuzhugu.javastudy.practice.netty.client.handle.CreateGroupResponseHandle;
+import org.liuzhugu.javastudy.practice.netty.client.handle.LoginResponseHandle;
+import org.liuzhugu.javastudy.practice.netty.client.handle.LogoutResponseHandle;
+import org.liuzhugu.javastudy.practice.netty.client.handle.MessageResponseHandle;
 import org.liuzhugu.javastudy.practice.netty.protocol.PacketDecoder;
 import org.liuzhugu.javastudy.practice.netty.protocol.PacketEncoder;
 import org.liuzhugu.javastudy.practice.netty.protocol.Spliter;
-import org.liuzhugu.javastudy.practice.netty.protocol.request.MessageRequestPacket;
-import org.liuzhugu.javastudy.practice.netty.client.handle.LoginResponseHandle;
-import org.liuzhugu.javastudy.practice.netty.client.handle.MessageResponseHandle;
+import org.liuzhugu.javastudy.practice.netty.util.SessionUtil;
 
 import java.util.Date;
 import java.util.Scanner;
@@ -54,7 +58,10 @@ public class NettyClient {
                         ch.pipeline().addLast(new PacketDecoder());
                         //如果是登陆请求，在login中的channelRead0里参数类型配,如果是信息才会在message中匹配参数
                         ch.pipeline().addLast(new LoginResponseHandle());
+                        //创建群组命令处理
+                        ch.pipeline().addLast(new CreateGroupResponseHandle());
                         ch.pipeline().addLast(new MessageResponseHandle());
+                        ch.pipeline().addLast(new LogoutResponseHandle());
                         //解码
                         ch.pipeline().addLast(new PacketEncoder());
                     }
@@ -86,15 +93,25 @@ public class NettyClient {
     }
 
     private static void startConsoleThread(Channel channel) {
+        Scanner sc=new Scanner(System.in);
+        LoginConsoleCommand loginConsoleCommand=new LoginConsoleCommand();
+        ConsoleCommandManager consoleCommandManager=new ConsoleCommandManager();
+
         new Thread(() -> {
             while (!Thread.interrupted()) {
-                //从控制台获取信息发送到服务端
-                System.out.println("输入消息发送至服务端: ");
-                Scanner sc = new Scanner(System.in);
-                String line = sc.nextLine();
-
-                channel.writeAndFlush(new MessageRequestPacket(line));
+                if(!SessionUtil.hasLogin(channel)){
+                    loginConsoleCommand.exec(sc,channel);
+                }else {
+                    consoleCommandManager.exec(sc,channel);
+                }
             }
         }).start();
+    }
+
+    private static void waitForLoginResponse() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ignored) {
+        }
     }
 }

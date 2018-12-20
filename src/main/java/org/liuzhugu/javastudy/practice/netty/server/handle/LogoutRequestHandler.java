@@ -1,10 +1,10 @@
-package org.liuzhugu.javastudy.practice.netty.study.server.handle;
+package org.liuzhugu.javastudy.practice.netty.server.handle;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.request.LogoutRequestPacket;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.response.LogoutResponsePacket;
-import org.liuzhugu.javastudy.practice.netty.study.util.SessionUtil;
+import org.liuzhugu.javastudy.practice.netty.protocol.request.LogoutRequestPacket;
+import org.liuzhugu.javastudy.practice.netty.protocol.response.LogoutResponsePacket;
+import org.liuzhugu.javastudy.practice.netty.util.SessionUtil;
 
 public class LogoutRequestHandler extends SimpleChannelInboundHandler<LogoutRequestPacket> {
 

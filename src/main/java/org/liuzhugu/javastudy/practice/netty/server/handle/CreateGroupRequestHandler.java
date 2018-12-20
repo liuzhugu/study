@@ -1,15 +1,15 @@
-package org.liuzhugu.javastudy.practice.netty.study.server.handle;
+package org.liuzhugu.javastudy.practice.netty.server.handle;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
-import org.liuzhugu.javastudy.practice.netty.study.common.IdTypeEnum;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.request.CreateGroupRequestPacket;
-import org.liuzhugu.javastudy.practice.netty.study.protocol.response.CreateGroupResponsePacket;
-import org.liuzhugu.javastudy.practice.netty.study.util.DistributedIdUtil;
-import org.liuzhugu.javastudy.practice.netty.study.util.SessionUtil;
+import org.liuzhugu.javastudy.practice.netty.common.IdTypeEnum;
+import org.liuzhugu.javastudy.practice.netty.protocol.request.CreateGroupRequestPacket;
+import org.liuzhugu.javastudy.practice.netty.protocol.response.CreateGroupResponsePacket;
+import org.liuzhugu.javastudy.practice.netty.util.DistributedIdUtil;
+import org.liuzhugu.javastudy.practice.netty.util.SessionUtil;
 
 
 import java.util.ArrayList;
