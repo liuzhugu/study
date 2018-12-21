@@ -33,12 +33,13 @@
  * http://creativecommons.org/publicdomain/zero/1.0/
  */
 
-package org.liuzhugu.javastudy.sourcecode.jdk8.container;
+package org.liuzhugu.javastudy.sourcecode.jdk8.container.queue;
 
-import java.util.AbstractCollection;
+import org.liuzhugu.javastudy.sourcecode.jdk8.container.inteface.AbstractCollection_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.container.queue.Queue_;
+
 import java.util.Collection;
 import java.util.NoSuchElementException;
-import java.util.Queue;
 
 
 public abstract class AbstractQueue_<E>

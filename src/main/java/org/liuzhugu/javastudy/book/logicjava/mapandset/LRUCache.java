@@ -1,7 +1,7 @@
 package org.liuzhugu.javastudy.book.logicjava.mapandset;
 
-import org.liuzhugu.javastudy.sourcecode.jdk8.container.LinkedHashMap_;
-import org.liuzhugu.javastudy.sourcecode.jdk8.container.Map_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.container.map.LinkedHashMap_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.container.map.Map_;
 
 public class LRUCache<K,V> extends LinkedHashMap_<K,V> {
 

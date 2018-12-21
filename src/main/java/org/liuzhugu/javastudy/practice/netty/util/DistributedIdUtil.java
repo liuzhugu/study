@@ -2,6 +2,7 @@ package org.liuzhugu.javastudy.practice.netty.util;
 
 import org.liuzhugu.javastudy.practice.netty.common.IdTypeEnum;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;

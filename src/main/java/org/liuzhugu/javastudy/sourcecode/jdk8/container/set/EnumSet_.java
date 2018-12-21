@@ -1,6 +1,6 @@
 
 
-package org.liuzhugu.javastudy.sourcecode.jdk8.container;
+package org.liuzhugu.javastudy.sourcecode.jdk8.container.set;
 
 import sun.misc.SharedSecrets;
 

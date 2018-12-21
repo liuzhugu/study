@@ -23,11 +23,16 @@
  *
  */
 
-package org.liuzhugu.javastudy.sourcecode.jdk8.container;
+package org.liuzhugu.javastudy.sourcecode.jdk8.container.queue;
 
 import java.util.*;
 import java.util.function.Consumer;
-
+/**
+ * 堆
+ * 完全二叉树，可以把逻辑概念上的二叉树可以方便地存储到数组中
+ * 只保证所有父子之间的大小关系，兄弟节点不像二叉查找树那样大小关系明确，因此只能确保最值或前n这种模糊大小关系
+ * 适合处理最值、前n、中位数问题
+ * */
 public class PriorityQueue_<E> extends AbstractQueue_<E>
     implements java.io.Serializable {
 
@@ -46,6 +51,25 @@ public class PriorityQueue_<E> extends AbstractQueue_<E>
     /**
      * 重要API
      * */
+    private void siftDown(int k, E x) {
+        if (comparator != null)
+            siftDownUsingComparator(k, x);
+        else
+            siftDownComparable(k, x);
+    }
+    @SuppressWarnings("unchecked")
+    private void heapify() {
+        for (int i = (size >>> 1) - 1; i >= 0; i--)
+            siftDown(i, (E) queue[i]);
+    }
+    private void siftUp(int k, E x) {
+        if (comparator != null)
+            siftUpUsingComparator(k, x);
+        else
+            siftUpComparable(k, x);
+    }
+
+
     public boolean add(E e) {
         return offer(e);
     }
@@ -332,18 +356,7 @@ public class PriorityQueue_<E> extends AbstractQueue_<E>
         return result;
     }
 
-    /**
-     * Removes the ith element from queue.
-     *
-     * Normally this method leaves the elements at up to i-1,
-     * inclusive, untouched.  Under these circumstances, it returns
-     * null.  Occasionally, in order to maintain the heap invariant,
-     * it must swap a later element of the list with one earlier than
-     * i.  Under these circumstances, this method returns the element
-     * that was previously at the end of the list and is now at some
-     * position before i. This fact is used by iterator.remove so as to
-     * avoid missing traversing elements.
-     */
+
     @SuppressWarnings("unchecked")
     private E removeAt(int i) {
         // assert i >= 0 && i < size;
@@ -362,25 +375,6 @@ public class PriorityQueue_<E> extends AbstractQueue_<E>
             }
         }
         return null;
-    }
-
-    /**
-     * Inserts item x at position k, maintaining heap invariant by
-     * promoting x up the tree until it is greater than or equal to
-     * its parent, or is the root.
-     *
-     * To simplify and speed up coercions and comparisons. the
-     * Comparable and Comparator versions are separated into different
-     * methods that are otherwise identical. (Similarly for siftDown.)
-     *
-     * @param k the position to fill
-     * @param x the item to insert
-     */
-    private void siftUp(int k, E x) {
-        if (comparator != null)
-            siftUpUsingComparator(k, x);
-        else
-            siftUpComparable(k, x);
     }
 
     @SuppressWarnings("unchecked")
@@ -410,20 +404,7 @@ public class PriorityQueue_<E> extends AbstractQueue_<E>
         queue[k] = x;
     }
 
-    /**
-     * Inserts item x at position k, maintaining heap invariant by
-     * demoting x down the tree repeatedly until it is less than or
-     * equal to its children or is a leaf.
-     *
-     * @param k the position to fill
-     * @param x the item to insert
-     */
-    private void siftDown(int k, E x) {
-        if (comparator != null)
-            siftDownUsingComparator(k, x);
-        else
-            siftDownComparable(k, x);
-    }
+
 
     @SuppressWarnings("unchecked")
     private void siftDownComparable(int k, E x) {
@@ -462,15 +443,8 @@ public class PriorityQueue_<E> extends AbstractQueue_<E>
         queue[k] = x;
     }
 
-    /**
-     * Establishes the heap invariant (described above) in the entire tree,
-     * assuming nothing about the order of the elements prior to the call.
-     */
-    @SuppressWarnings("unchecked")
-    private void heapify() {
-        for (int i = (size >>> 1) - 1; i >= 0; i--)
-            siftDown(i, (E) queue[i]);
-    }
+
+
 
     /**
      * Returns the comparator used to order the elements in this

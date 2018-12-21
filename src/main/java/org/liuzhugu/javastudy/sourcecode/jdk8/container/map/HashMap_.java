@@ -1,4 +1,7 @@
-package org.liuzhugu.javastudy.sourcecode.jdk8.container;
+package org.liuzhugu.javastudy.sourcecode.jdk8.container.map;
+
+import org.liuzhugu.javastudy.sourcecode.jdk8.container.set.AbstractSet_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.container.set.Set_;
 
 import java.io.IOException;
 import java.io.InvalidObjectException;
@@ -179,7 +182,7 @@ public class HashMap_<K,V> extends AbstractMap_<K,V>
     }
 
     public HashMap_() {
-        this.loadFactor = DEFAULT_LOAD_FACTOR; // all other fields defaulted
+        this.loadFactor = DEFAULT_LOAD_FACTOR; // all inteface fields defaulted
     }
 
 

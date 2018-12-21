@@ -1,12 +1,11 @@
 package org.liuzhugu.javastudy.book.logicjava.heap;
 
 import lombok.Data;
-import org.liuzhugu.javastudy.sourcecode.jdk8.container.PriorityQueue_;
-import org.liuzhugu.javastudy.sourcecode.jdk8.container.Queue_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.container.queue.PriorityQueue_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.container.queue.Queue_;
 
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Queue;
 
 /**
  * 优先级队列
@@ -70,5 +69,9 @@ public class PriorityQueueStudy {
         }
 
         //TopK
+        TopK<Integer> top5=new TopK<>(5);
+        top5.addAll(Arrays.asList(new Integer[]{100,14,13,9,3,4,11,22,66,55,39,12,38,25}));
+        System.out.println(Arrays.toString(top5.toArray(new Integer[0])));
+        System.out.println(top5.getKth());
     }
 }

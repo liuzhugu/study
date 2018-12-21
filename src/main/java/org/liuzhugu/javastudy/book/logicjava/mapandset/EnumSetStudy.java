@@ -1,11 +1,10 @@
 package org.liuzhugu.javastudy.book.logicjava.mapandset;
 
 import lombok.Data;
-import org.liuzhugu.javastudy.sourcecode.jdk8.container.EnumSet_;
-import org.liuzhugu.javastudy.sourcecode.jdk8.container.Set_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.container.set.EnumSet_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.container.set.Set_;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
 
 

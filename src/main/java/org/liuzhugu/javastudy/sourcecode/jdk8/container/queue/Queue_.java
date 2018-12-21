@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.sourcecode.jdk8.container;
+package org.liuzhugu.javastudy.sourcecode.jdk8.container.queue;
 
 import java.util.Collection;
 

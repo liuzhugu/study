@@ -2,8 +2,8 @@ package org.liuzhugu.javastudy.book.logicjava.mapandset;
 
 
 import lombok.Data;
-import org.liuzhugu.javastudy.sourcecode.jdk8.container.EnumMap_;
-import org.liuzhugu.javastudy.sourcecode.jdk8.container.Map_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.container.map.EnumMap_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.container.map.Map_;
 
 import java.util.List;
 
