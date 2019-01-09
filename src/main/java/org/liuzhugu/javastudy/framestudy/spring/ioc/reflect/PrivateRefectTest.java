@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.springpractice.ioc.reflect;
+package org.liuzhugu.javastudy.framestudy.spring.ioc.reflect;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -8,7 +8,7 @@ public class PrivateRefectTest {
     public static void main(String[] args)throws Exception{
         ClassLoader classLoader=Thread.currentThread().getContextClassLoader();
         Class<?> clazz=classLoader.
-                loadClass("org.liuzhugu.javastudy.springpractice.ioc.reflect.PrivateCar");
+                loadClass("org.liuzhugu.javastudy.framestudy.spring.ioc.reflect.PrivateCar");
         PrivateCar car=(PrivateCar) clazz.getConstructor().newInstance();
 
         //修改字段访问控制

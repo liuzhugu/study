@@ -1,6 +1,6 @@
-package org.liuzhugu.javastudy.springpractice.ioc;
+package org.liuzhugu.javastudy.framestudy.spring.ioc;
 
-public class MoAttack implements ActorArrangable{
+public class MoAttack implements ActorArrangable {
     public MoAttack(){}
 
 

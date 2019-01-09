@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.springpractice.ioc;
+package org.liuzhugu.javastudy.framestudy.spring.ioc;
 
 public class LiuDeHua implements GeLi{
 

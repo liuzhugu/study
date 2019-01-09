@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.springpractice.ioc.reflect;
+package org.liuzhugu.javastudy.framestudy.spring.ioc.reflect;
 
 public class Test {
     public static void main(String[] args)throws Exception{

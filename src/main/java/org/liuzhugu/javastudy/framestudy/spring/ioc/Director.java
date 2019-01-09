@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.springpractice.ioc;
+package org.liuzhugu.javastudy.framestudy.spring.ioc;
 
 //导演,作为注入依赖关系的第三方
 public class Director {

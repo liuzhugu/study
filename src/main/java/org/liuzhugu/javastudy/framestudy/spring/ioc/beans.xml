@@ -7,7 +7,7 @@
 
 
 <!--在xml中声明依赖关系,依赖关系发生变动的时候只需修改xml而不用改客户端代码-->
-    <bean id="geLi" class="org.liuzhugu.javastudy.springpractice.ioc.LiuDeHua"/>
-    <bean id="moAttack" class="org.liuzhugu.javastudy.springpractice.ioc.MoAttack"
+    <bean id="geLi" class="org.liuzhugu.javastudy.framestudy.spring.ioc.LiuDeHua"/>
+    <bean id="moAttack" class="org.liuzhugu.javastudy.framestudy.spring.ioc.MoAttack"
           p:geLi-ref="geLi"/>
 </beans>

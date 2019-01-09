@@ -1,11 +1,8 @@
-package org.liuzhugu.javastudy.springpractice.ioc;
+package org.liuzhugu.javastudy.framestudy.spring.ioc;
 
-import org.liuzhugu.javastudy.springpractice.ioc.reflect.Car;
+import org.liuzhugu.javastudy.framestudy.spring.ioc.reflect.Car;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 public class ClassLoaderTest {
 
@@ -13,7 +10,7 @@ public class ClassLoaderTest {
 
         //使用appLoader显式加载
         ClassLoader classLoader=Thread.currentThread().getContextClassLoader();
-        Class<?> clazz = classLoader.loadClass("org.liuzhugu.javastudy.springpractice.ioc.reflect.Car");
+        Class<?> clazz = classLoader.loadClass("org.liuzhugu.javastudy.framestudy.spring.ioc.reflect.Car");
         Car customizeCar = (Car) clazz.getConstructor().newInstance();
 
         //默认加载
