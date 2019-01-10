@@ -42,12 +42,15 @@ public class RpcFramework {
                                     //方法   参数  返回值
                                     String methodName=input.readUTF();
                                     Class<?>[] paramterTypes=(Class<?>[])input.readObject();
+                                    Object[] param=(Object[]) input.readObject();
                                     ObjectOutputStream out=new ObjectOutputStream(socket.getOutputStream());
 
                                     try {
                                         //执行方法
-                                        Method method=service.getClass().getMethod(methodName);
-                                        Object result=method.invoke(service,paramterTypes);
+                                        Method method=service.getClass().getMethod(methodName,paramterTypes);
+                                        Object result=method.invoke(service,param);
+                                        //LOG
+                                        System.out.println("ip:"+socket.getInetAddress()+" transfer method:"+methodName+" result:"+result);
                                         //返回结果
                                         out.writeObject(result);
                                     }catch (Throwable t){
@@ -88,7 +91,7 @@ public class RpcFramework {
         if(port<=0||port>65535){
             throw new IllegalArgumentException("Invalid port "+port);
         }
-        System.out.println("Get remote service:"+interfaceClass.getName()+" from server "+host+":"+host);
+        System.out.println("Get remote service:"+interfaceClass.getName()+" from server "+host+":"+port);
         return (T) Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[]{interfaceClass}, new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
