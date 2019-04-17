@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.practice.designpatterns;
+package org.liuzhugu.javastudy.practice.designpatterns.temple;
 
 /**
  * Created by liuting6 on 2018/2/27.

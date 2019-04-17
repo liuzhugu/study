@@ -10,6 +10,8 @@ public class BraveKnight implements Knight {
     }
 
     @Override
+    //在这个方法执行前后调用了其他方法,并且在该class内没有任何感知
+    //切片切入的代码什么时候加上修改去掉都没有任何感知,不会影响到该方法
     public void embarkOnQuest() {
         quest.embark();
     }
