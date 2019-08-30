@@ -1,8 +1,5 @@
-package org.liuzhugu.javastudy.logicjava.chapter21;
+package org.liuzhugu.javastudy.book.logicjava.annotation;
 
-import lombok.Builder;
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
 public class Student {
     @Label("姓名")

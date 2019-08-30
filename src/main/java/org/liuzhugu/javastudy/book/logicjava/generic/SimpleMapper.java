@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.logicjava.chapter21;
+package org.liuzhugu.javastudy.book.logicjava.generic;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

@@ -1,4 +1,7 @@
-package org.liuzhugu.javastudy.logicjava.chapter21;
+package org.liuzhugu.javastudy.book.logicjava.annotation;
+
+import org.liuzhugu.javastudy.book.logicjava.annotation.Format;
+import org.liuzhugu.javastudy.book.logicjava.annotation.Label;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;

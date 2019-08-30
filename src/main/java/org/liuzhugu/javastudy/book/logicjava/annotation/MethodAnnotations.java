@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.logicjava.chapter21;
+package org.liuzhugu.javastudy.book.logicjava.annotation;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
