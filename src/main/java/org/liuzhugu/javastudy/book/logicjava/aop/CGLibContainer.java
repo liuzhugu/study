@@ -48,7 +48,7 @@ public class CGLibContainer {
     //每个类的每个切点的方法列表
     static Map<Class<?>,Map<InterceptPoint, List<Method>>> interceptMethodsMap = new HashMap<>();
 
-    //切点列表
+    //初始化切面类,如果想要变得灵活,可以弄成配置,从配置中加载
     static  Class<?>[] aspects = new Class<?>[]{
             ServiceLogAspect.class,ExceptionAspect.class
     };
@@ -58,9 +58,18 @@ public class CGLibContainer {
         init();
     }
     private static void init() {
+        //遍历切面类,以作用于的类作为第一层key,然后类中用到的切点枚举作为第二层key
+        //和每个切点枚举有多少方法作为第二层value(比如有两个切面类想给同一个目标类增强
+        //before,那么便是目标类--before--切面类1before方法
+        //                             切面类2before方法）
+
+        //遍历所有切面类
         for (Class<?> cls : aspects) {
             Aspect aspect = cls.getAnnotation(Aspect.class);
             if (aspect != null) {
+                //直接获取该切面类实现了什么方法作用于什么类
+                //然后填充映射关系
+
                 //获取方法
                 Method before = getMethod(cls,"before",new Class<?>[]{
                         //实例        方法          参数
@@ -78,6 +87,7 @@ public class CGLibContainer {
                 Class<?>[] intercepttedArr = aspect.value();
                 //填充每个类的每个切点的方法列表
                 for (Class<?> interceptted : intercepttedArr) {
+                    //填充映射关系
                     addInterceptMethod(interceptted,InterceptPoint.BEFORE,before);
                     addInterceptMethod(interceptted,InterceptPoint.AFTER,after);
                     addInterceptMethod(interceptted,InterceptPoint.EXCEPTION,exception);
@@ -110,7 +120,7 @@ public class CGLibContainer {
         try {
             return cls.getMethod(methodName,clss);
         }catch (Exception e){
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
@@ -146,7 +156,7 @@ public class CGLibContainer {
                 //执行after方法
                 List<Method> afterMethods = getInterceptMethods(object.getClass().getSuperclass(),InterceptPoint.AFTER);
                 for (Method m : afterMethods) {
-                    m.invoke(null,new Object[]{object,method,args});
+                    m.invoke(null,new Object[]{object,method,args,result});
                 }
                 return result;
             }catch (Exception e) {
