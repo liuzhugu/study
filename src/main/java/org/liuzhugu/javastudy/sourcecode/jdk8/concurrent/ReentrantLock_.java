@@ -6,12 +6,12 @@ import java.util.concurrent.TimeUnit;
 /**
  * 可重入锁,锁的持有人可以重复进入该锁
  * 总结:
- * 1.会有公平和非公平的实现,它们都会覆盖掉lock和tryAcquire来实现公平和非公平
- * 2.tryAcquire在AQS是直接抛异常,因此如果子类不覆盖该方法的话就无法正常工作
- * 3.默认为非公平,要想公平得在初始化时设为true
- * 4.公平直接acquire,如果等待队列为空才会尝试加锁,加锁失败进入等待队列
- * 5.非公平先直接CAS加锁,失败才执行acquire,并且队列不为空也直接加锁，加锁失败才进入等待队列
- * 6.在前一个线程释放锁之后,如果是非公平的话,新来的线程会比先来的线程多两次抢先加锁的机会,因此会出现先来加锁的线程被后面线程抢先的情况
+ *      1.会有公平和非公平的实现,它们都会覆盖掉lock和tryAcquire来实现公平和非公平
+ *      2.tryAcquire在AQS是直接抛异常,因此如果子类不覆盖该方法的话就无法正常工作
+ *      3.默认为非公平,要想公平得在初始化时设为true
+ *      4.公平直接acquire,如果等待队列为空才会尝试加锁,加锁失败进入等待队列
+ *      5.非公平先直接CAS加锁,失败才执行acquire,并且队列不为空也直接加锁，加锁失败才进入等待队列
+ *      6.在前一个线程释放锁之后,如果是非公平的话,新来的线程会比先来的线程多两次抢先加锁的机会,因此会出现先来加锁的线程被后面线程抢先的情况
  * */
 public class ReentrantLock_ implements Lock_, java.io.Serializable {
     private static final long serialVersionUID = 7373984872572414699L;
@@ -152,6 +152,9 @@ public class ReentrantLock_ implements Lock_, java.io.Serializable {
             final Thread current = Thread.currentThread();
             int c = getState();
             if (c == 0) {
+                //返回false的情况
+                //1.队列中没有节点
+                //2.仅有一个节点是当前线程创建的节点
                 if (!hasQueuedPredecessors() &&
                         compareAndSetState(0, acquires)) {
                     setExclusiveOwnerThread(current);
@@ -182,7 +185,6 @@ public class ReentrantLock_ implements Lock_, java.io.Serializable {
     public ReentrantLock_(boolean fair) {
         sync = fair ? new FairSync() : new NonfairSync();
     }
-
 
 
 

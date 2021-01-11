@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.course.javaconcurrrent;
+package org.liuzhugu.javastudy.course.concurrrent;
 
 /**
  * 单例模式

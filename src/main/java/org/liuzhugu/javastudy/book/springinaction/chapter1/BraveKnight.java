@@ -10,6 +10,7 @@ public class BraveKnight implements Knight {
     }
 
     @Override
+    //通过切面，在这个方法执行前后执行了其他方法，并且在该类中没有任何感知
     public void embarkOnQuest() {
         quest.embark();
     }

@@ -121,12 +121,15 @@ public abstract class AbstractQueuedSynchronizer_
         // Try the fast path of enq; backup to full enq on failure
         Node pred = tail;
         if (pred != null) {
+            //该节点指向队尾
             node.prev = pred;
+            //CAS设置队尾
             if (compareAndSetTail(pred, node)) {
                 pred.next = node;
                 return node;
             }
         }
+        //队尾为空  双重锁判定  设置该节点为队尾时可能队列中有节点了
         enq(node);
         return node;
     }
@@ -243,6 +246,7 @@ public abstract class AbstractQueuedSynchronizer_
         return Thread.interrupted();
     }
 
+    //
     final boolean acquireQueued(final Node node, int arg) {
         boolean failed = true;
         try {
@@ -554,13 +558,13 @@ public abstract class AbstractQueuedSynchronizer_
             s.thread != null;
     }
 
+    //head是哨兵节点
     public final boolean hasQueuedPredecessors() {
-        // The correctness of this depends on head being initialized
-        // before tail and on head.next being accurate if the current
-        // thread is first in queue.
-        Node t = tail; // Read fields in reverse initialization order
+        // 取决于head在tail之前被初始化   如果当前线程在队列首位  那么head的下一位是正确的
+        Node t = tail; // 以和初始化顺序相反的顺序来读取
         Node h = head;
         Node s;
+
         return h != t &&
             ((s = h.next) == null || s.thread != Thread.currentThread());
     }
@@ -709,6 +713,7 @@ public abstract class AbstractQueuedSynchronizer_
     }
 
 
+    //条件
     public class ConditionObject implements Condition_, java.io.Serializable {
         private static final long serialVersionUID = 1173984872572414699L;
         /** First node of condition queue. */
@@ -716,11 +721,9 @@ public abstract class AbstractQueuedSynchronizer_
         /** Last node of condition queue. */
         private transient Node lastWaiter;
 
-
         public ConditionObject() { }
 
         // Internal methods
-
 
         private Node addConditionWaiter() {
             Node t = lastWaiter;
@@ -738,7 +741,33 @@ public abstract class AbstractQueuedSynchronizer_
             return node;
         }
 
+        //挂起
+        public final void await() throws InterruptedException {
+            if (Thread.interrupted())
+                throw new InterruptedException();
+            //将当前线程加入condition队列  当满足条件时被唤醒
+            Node node = addConditionWaiter();
+            //释放占有的锁
+            int savedState = fullyRelease(node);
+            int interruptMode = 0;
+            while (!isOnSyncQueue(node)) {
+                //挂起
+                LockSupport.park(this);
+                //被重新唤醒后  此时状态改变  跳出循环
+                if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
+                    break;
+            }
+            //尝试重新获取锁  获取失败继续挂起
+            if (acquireQueued(node, savedState) && interruptMode != THROW_IE)
+                interruptMode = REINTERRUPT;
+            if (node.nextWaiter != null) // clean up if cancelled
+                unlinkCancelledWaiters();
+            if (interruptMode != 0)
+                reportInterruptAfterWait(interruptMode);
+        }
 
+
+        //唤醒
         private void doSignal(Node first) {
             do {
                 if ( (firstWaiter = first.nextWaiter) == null)
@@ -784,6 +813,7 @@ public abstract class AbstractQueuedSynchronizer_
         public final void signal() {
             if (!isHeldExclusively())
                 throw new IllegalMonitorStateException();
+            //唤醒第一个线程
             Node first = firstWaiter;
             if (first != null)
                 doSignal(first);
@@ -832,26 +862,6 @@ public abstract class AbstractQueuedSynchronizer_
                 throw new InterruptedException();
             else if (interruptMode == REINTERRUPT)
                 selfInterrupt();
-        }
-
-
-        public final void await() throws InterruptedException {
-            if (Thread.interrupted())
-                throw new InterruptedException();
-            Node node = addConditionWaiter();
-            int savedState = fullyRelease(node);
-            int interruptMode = 0;
-            while (!isOnSyncQueue(node)) {
-                LockSupport.park(this);
-                if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
-                    break;
-            }
-            if (acquireQueued(node, savedState) && interruptMode != THROW_IE)
-                interruptMode = REINTERRUPT;
-            if (node.nextWaiter != null) // clean up if cancelled
-                unlinkCancelledWaiters();
-            if (interruptMode != 0)
-                reportInterruptAfterWait(interruptMode);
         }
 
 
