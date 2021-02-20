@@ -6,7 +6,7 @@
 
     <!-- 1.数据库连接池： DriverManagerDataSource 也可以使用DBCP2-->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://127.0.0.1:3306/study?useUnicode=true"/>
         <property name="username" value="root"/>
         <property name="password" value="liuaisong1994AA!"/>
@@ -32,4 +32,6 @@
         <property name="basePackage" value="org.liuzhugu.javastudy.framestudy.mybatis.dao"/>
     </bean>
 
+    <!-- 通过工厂实现类生成bean -->
+    <bean id="userDao" class="org.liuzhugu.javastudy.framestudy.mybatis.spring_mybatis.ProxyBeanFactory"/>
 </beans>

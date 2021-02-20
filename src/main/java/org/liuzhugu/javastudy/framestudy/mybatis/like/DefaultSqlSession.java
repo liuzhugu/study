@@ -1,6 +1,5 @@
 package org.liuzhugu.javastudy.framestudy.mybatis.like;
 
-import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.*;
@@ -88,26 +87,29 @@ public class DefaultSqlSession implements SqlSession{
         int size = parameterMap.size();
 
         //单个参数
+        if (parameter instanceof Integer) {
+            for(int i = 1;i <= size;i ++) {
+                preparedStatement.setInt(i,Integer.parseInt(parameter.toString()));
+                return;
+            }
+        }
         if (parameter instanceof Long) {
             for(int i = 1;i <= size;i ++) {
                 preparedStatement.setLong(i,Long.parseLong(parameter.toString()));
-            }
-        }
-        if (parameter instanceof Integer) {
-            for(int i = 1;i <= size;i ++) {
-                preparedStatement.setLong(i,Long.parseLong(parameter.toString()));
+                return;
             }
         }
         if (parameter instanceof String) {
             for(int i = 1;i <= size;i ++) {
-                preparedStatement.setLong(i,Long.parseLong(parameter.toString()));
+                preparedStatement.setString(i,parameter.toString());
+                return;
             }
         }
 
         //如果不是单个参数 那么就是对象
 
         Map<String,Object> fieldMap = new HashMap<>();
-        //去对象的所有字段出来遍历处理
+        //将参数的所有字段取出来遍历处理
         Field[] declareFields = parameter.getClass().getDeclaredFields();
         for(Field field : declareFields) {
             String name = field.getName();
@@ -116,7 +118,7 @@ public class DefaultSqlSession implements SqlSession{
             field.setAccessible(false);
             fieldMap.put(name,obj);
         }
-
+        //比对XML中设置的参数类型   设置参数
         for (int i = 1;i <= size;i ++) {
             String parameterDefine = parameterMap.get(i);
             Object obj = fieldMap.get(parameterDefine);

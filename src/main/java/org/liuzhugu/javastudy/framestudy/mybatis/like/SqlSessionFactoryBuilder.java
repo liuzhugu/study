@@ -101,6 +101,7 @@ public class SqlSessionFactoryBuilder {
                     for (int i = 1;matcher.find();i ++) {
                         String g1 = matcher.group(1);
                         String g2 = matcher.group(2);
+                        //设置参数位置和字段名的映射
                         parameter.put(i,g2);
                         //将 #{字段名} 替换为 占位符 ?
                         sql = sql.replace(g1,"?");

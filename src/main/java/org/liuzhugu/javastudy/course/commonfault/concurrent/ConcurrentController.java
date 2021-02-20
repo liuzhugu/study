@@ -3,7 +3,6 @@ package org.liuzhugu.javastudy.course.commonfault.concurrent;
 
 import jodd.util.concurrent.ThreadFactoryBuilder;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
