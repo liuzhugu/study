@@ -1,5 +1,6 @@
 package org.liuzhugu.javastudy.framestudy.mybatis.spring_mybatis;
 
+import org.liuzhugu.javastudy.framestudy.mybatis.dao.IUserDao;
 import org.springframework.beans.factory.FactoryBean;
 
 import java.lang.reflect.InvocationHandler;

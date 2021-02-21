@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+       default-autowire="byName">
+
+
+    <!-- mybatis一共两部分核心内容-->
+    <!-- 1.根据配置设置数据源  建立连接 -->
+    <bean id="sqlSessionFactory" class="org.liuzhugu.javastudy.framestudy.mybatis.spring_mybatis.SqlSessionFactoryBean">
+        <property name="resource" value="mybatis/spring/mybatis-config-datasource.xml"/>
+    </bean>
+    <!-- 2.扫描每个mapper的class以及对应的XML  然后封装这些映射操作 -->
+    <bean class="org.liuzhugu.javastudy.framestudy.mybatis.spring_mybatis.MapperScannerConfigurer">
+        <!-- 从哪来 设置要扫描的包 -->
+        <property name="basePackage" value="org.liuzhugu.javastudy.framestudy.mybatis.dao"/>
+        <!-- 到哪去 注入到sqlSessionFactory去 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+</beans>

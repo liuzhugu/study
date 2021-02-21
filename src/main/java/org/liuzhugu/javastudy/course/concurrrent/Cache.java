@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.course.javaconcurrrent;
+package org.liuzhugu.javastudy.course.concurrrent;
 
 import java.util.HashMap;
 import java.util.Map;

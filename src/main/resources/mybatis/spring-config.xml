@@ -33,5 +33,6 @@
     </bean>
 
     <!-- 通过工厂实现类生成bean -->
-    <bean id="userDao" class="org.liuzhugu.javastudy.framestudy.mybatis.spring_mybatis.ProxyBeanFactory"/>
+    <!--<bean id="userDao" class="org.liuzhugu.javastudy.framestudy.mybatis.spring_mybatis.ProxyBeanFactory"/>-->
+    <bean id="userDao" class="org.liuzhugu.javastudy.framestudy.mybatis.spring_mybatis.RegisterBeanFactory"/>
 </beans>

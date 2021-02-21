@@ -1,5 +1,7 @@
 package org.liuzhugu.javastudy.framestudy.mybatis.spring_mybatis;
 
+import org.liuzhugu.javastudy.framestudy.mybatis.dao.IUserDao;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 public class Test {
@@ -17,6 +19,6 @@ public class Test {
 
         IUserDao userDao = (IUserDao) Proxy.newProxyInstance(classLoader,classes,handler);
 
-        System.out.println("测试结果为: " + userDao.queryUserInfo());
+        System.out.println("测试结果为: " + userDao.queryUserInfoById(1));
     }
 }

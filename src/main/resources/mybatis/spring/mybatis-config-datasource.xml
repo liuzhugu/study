@@ -16,7 +16,6 @@
 
     <mappers>
         <mapper resource="mybatis/mapper/User_Mapper.xml"/>
-        <mapper resource="mybatis/mapper/School_Mapper.xml"/>
     </mappers>
 
 </configuration>
