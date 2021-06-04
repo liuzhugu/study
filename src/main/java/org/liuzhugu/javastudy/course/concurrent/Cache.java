@@ -1,10 +1,9 @@
-package org.liuzhugu.javastudy.course.concurrrent;
+package org.liuzhugu.javastudy.course.concurrent;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Cache<K,V> {

@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.course.concurrrent;
+package org.liuzhugu.javastudy.course.concurrent;
 
 import java.util.concurrent.RecursiveTask;
 
