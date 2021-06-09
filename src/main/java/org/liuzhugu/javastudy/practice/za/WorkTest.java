@@ -6,7 +6,11 @@ import java.util.Date;
 
 public class WorkTest {
     public static void main(String[] args) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm");
-        System.out.println(simpleDateFormat.format(new Date()));
+        String str = "123.0";
+        try {
+            int result = Integer.parseInt(str);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
