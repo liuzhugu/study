@@ -1,5 +1,8 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.thread;
 
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.LongAdder;
+
 public class ThreadTest extends Thread{
     private String name;
 
