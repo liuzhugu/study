@@ -1,8 +1,11 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.securitysystem;
 
-import org.checkerframework.checker.units.qual.C;
-import org.liuzhugu.javastudy.book.worldviewinthecode.Factory;
+import io.netty.util.Timeout;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
@@ -11,9 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 报警中心
  * */
+@Slf4j
 public class AlarmAgent {
 
-    private static volatile boolean connectedToServer = true;
+    private static volatile boolean connectedToServer = false;
 
     /**
      * 初始化  报警服务
@@ -44,26 +48,78 @@ public class AlarmAgent {
         heartbeatExecutor.scheduleAtFixedRate(new HeartbeatTask(),5000,2000, TimeUnit.MILLISECONDS);
     }
 
-    public void sendAlarm(AlarmInfo alarmInfo) {
+    //保护条件
+    private final Predicate agentConnected = new Predicate() {
+        @Override
+        public boolean evaluate() {
+            //连接是否建立完成
+            return connectedToServer;
+        }
+    };
 
+    //阻塞器
+    private final Blocker blocker = new ConditionVarBlocker();
+
+
+
+    /**
+     * 上传报警信息给报警服务
+     * */
+    public void sendAlarm(AlarmInfo alarmInfo) throws Exception{
+        //构建guardedAction
+        GuardedAction<Void> guardedAction = new GuardedAction(agentConnected) {
+            public Void call() throws Exception {
+                doSendAlarm(alarmInfo);
+                return null;
+            }
+        };
+
+        blocker.callWithGuard(guardedAction);
     }
 
+    /**
+     * 通过网络连接  将告警信息发给告警服务器
+     * */
     private void doSendAlarm(AlarmInfo alarmInfo) {
+        log.info("start send alarm:" + alarmInfo);
+        //模拟发送告警信息至服务器的耗时
+        try {
+            Thread.sleep(50);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        log.info("end send alarm");
 
     }
+
+
 
     /**
      * 确认和报警服务器建立连接
      * */
-    private void doConnected() {
+    private void onConnected() {
         //通过blocker去唤醒
-
+        try {
+            blocker.signalAfter(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    //唤醒前的动作状态
+                    //修改连接报警服务器的状态
+                    connectedToServer = true;
+                    log.info("connect to server");
+                    //条件满足  去唤醒
+                    return Boolean.TRUE;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * 和报警中心断开连接
      * */
-    private void onDisConnected() {
+    protected void onDisConnected() {
         //通过volatile的语义让其他线程能及时读取到
         //其他线程上报报警信息是stateOperation不满足则阻塞
         connectedToServer = false;
@@ -79,10 +135,10 @@ public class AlarmAgent {
         connectingTask.run();
     }
 
-    /**
+     /**
      * 与报警服务器建立连接的线程
      * */
-     class ConnectingTask implements Runnable {
+     private class ConnectingTask implements Runnable {
         @Override
         public void run() {
             //走socketChannel的方式和报警服务器建立一个连接
@@ -95,14 +151,15 @@ public class AlarmAgent {
 
             //连接建立完成
             System.out.println("alarm connected");
-            doConnected();
+            onConnected();
         }
     }
 
     /**
-     * 心跳检查线程
+     * 心跳检查线程   定时检查与告警服务器的连接是否正常
+     * 发现连接异常后自动重新连接
      * */
-    class HeartbeatTask implements Runnable {
+    private class HeartbeatTask extends TimerTask {
         @Override
         public void run() {
             //通过socket和报警服务器发送心跳机制
