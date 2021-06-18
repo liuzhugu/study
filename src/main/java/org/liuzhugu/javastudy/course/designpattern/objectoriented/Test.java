@@ -5,6 +5,8 @@ import org.checkerframework.checker.units.qual.A;
 import java.util.logging.Level;
 
 public class Test {
+    private static final String BUCKET_NAME = "ai_images_bucket";
+
     public static void main(String[] args) {
         //05  封装
         Wallet wallet = new Wallet();
@@ -21,8 +23,18 @@ public class Test {
         Filter authencationFilter = new AuthencationFilter();
         Filter rateLimitFilter = new RateLimitFilter();
         //09  抽象的不够的实现  当更换实现方案时  需要改动太大
-
+        Image image = new Image();
+        AliyunImageStoreBefore imageStore = new AliyunImageStoreBefore();
+        imageStore.createBucketIfNotExisting(BUCKET_NAME);
+        String accessToken = imageStore.generateAccessToken();
+        imageStore.uploadToAliyun(image,BUCKET_NAME,accessToken);
         //09  抽象以后  可以自由替换
-
+        ImageStore newImageStore = new AliyunImageStore();
+        newImageStore.upload(image,BUCKET_NAME);
+        //轻松替换  而不用修改API   如果再配合spring的IOC  那么代码无需任何变动  只需修改配置
+        newImageStore = new PrivateImageStore();
+        newImageStore.upload(image,BUCKET_NAME);
+        //10 多用组合少用继承
+        Ostrich ostrich = new Ostrich();
     }
 }
