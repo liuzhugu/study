@@ -5,6 +5,16 @@ public class TerminationToken {
 
     public boolean reserva;
 
+    private boolean isRunning;
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
+    }
+
     public TerminationToken(boolean shutdowm) {
         this.shutdowm = shutdowm;
     }
@@ -20,5 +30,9 @@ public class TerminationToken {
 
     public void notifyThreadTermination(Thread thread) {
 
+    }
+
+    public static TerminationToken getInstance() {
+        return null;
     }
 }

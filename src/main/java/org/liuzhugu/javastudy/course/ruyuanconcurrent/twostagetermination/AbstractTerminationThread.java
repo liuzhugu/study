@@ -1,6 +1,7 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * 终端线程的抽象类
@@ -9,11 +10,11 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
 
     public final TerminationToken terminationToken;
 
-    private List<ClientHandler> waitStopClientHandlers;
-
     public AbstractTerminationThread(TerminationToken terminationToken) {
         this.terminationToken = terminationToken;
     }
+
+
 
     /**
      * 执行模板
@@ -48,6 +49,15 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
         }
     }
 
+    public void terminate() {
+        try {
+            TerminationToken.getInstance().setRunning(false);
+            doTerminate();
+        } catch (Exception e) {
+
+        }
+    }
+
     /**
      * 真正的业务逻辑
      * */
@@ -59,13 +69,10 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
     public abstract void doClean(Exception e);
 
 
+
+
     /**
      * 中断方法
      * */
-    @Override
-    public void doTermination() {
-        System.out.println("doTermination -> 准备打烊，不接待客户，大家都把手上的工作处理完放下把");
-        this.interrupt();
-        waitStopClientHandlers.forEach(ClientHandler::stop);
-    }
+    public abstract void doTerminate();
 }

@@ -1,5 +1,4 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination;
 
-public interface Termination {
-    void terminate();
+public class RuYuanClient {
 }
