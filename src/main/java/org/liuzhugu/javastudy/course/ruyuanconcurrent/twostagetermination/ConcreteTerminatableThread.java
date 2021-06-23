@@ -1,8 +1,10 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination;
 
+import org.liuzhugu.javastudy.sourcecode.jdk8.concurrent.ExecutorService_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.concurrent.Executors_;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
 
 public class ConcreteTerminatableThread extends AbstractTerminationThread {
 
@@ -14,7 +16,7 @@ public class ConcreteTerminatableThread extends AbstractTerminationThread {
     /**
      * 自主就餐区 + 排队等待区
      * */
-    private ExecutorService executor = Executors.newFixedThreadPool(10);
+    private ExecutorService_ executor = Executors_.newFixedThreadPool(10);
 
 
     public ConcreteTerminatableThread(TerminationToken terminationToken) {
@@ -29,7 +31,8 @@ public class ConcreteTerminatableThread extends AbstractTerminationThread {
     @Override
     public void doClean(Exception e) {
         System.out.println("打扫卫生，熄灯");
-        executor.shutdown();
+        //线程池、阻塞队列里的任务统统不允许再执行了  不过会返回阻塞队列中没执行完的任务
+        executor.shutdownNow();
     }
 
     @Override
