@@ -23,6 +23,77 @@ public class FutureTask_<V> implements RunnableFuture_<V> {
     /** Treiber stack of waiting threads */
     private volatile FutureTask_.WaitNode waiters;
 
+
+    public void run() {
+        if (state != NEW ||
+                !UNSAFE.compareAndSwapObject(this, runnerOffset,
+                        null, Thread.currentThread()))
+            return;
+        try {
+            Callable<V> c = callable;
+            if (c != null && state == NEW) {
+                V result;
+                boolean ran;
+                try {
+                    //执行任务  获取返回值
+                    result = c.call();
+                    ran = true;
+                } catch (Throwable ex) {
+                    result = null;
+                    ran = false;
+                    setException(ex);
+                }
+                if (ran)
+                    //设置返回值
+                    set(result);
+            }
+        } finally {
+            // runner must be non-null until state is settled to
+            // prevent concurrent calls to run()
+            runner = null;
+            // state must be re-read after nulling runner to prevent
+            // leaked interrupts
+            int s = state;
+            if (s >= INTERRUPTING)
+                handlePossibleCancellationInterrupt(s);
+        }
+    }
+
+    protected void set(V v) {
+        //并发安全地设置返回结果
+        if (UNSAFE.compareAndSwapInt(this, stateOffset, NEW, COMPLETING)) {
+            outcome = v;
+            UNSAFE.putOrderedInt(this, stateOffset, NORMAL); // final state
+            finishCompletion();
+        }
+    }
+
+    /**
+     * @throws CancellationException {@inheritDoc}
+     */
+    public V get() throws InterruptedException, ExecutionException {
+        int s = state;
+        if (s <= COMPLETING)
+            //阻塞  知道结果准备好
+            s = awaitDone(false, 0L);
+        return report(s);
+    }
+
+    /**
+     * @throws CancellationException {@inheritDoc}
+     */
+    public V get(long timeout, TimeUnit unit)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        if (unit == null)
+            throw new NullPointerException();
+        int s = state;
+        if (s <= COMPLETING &&
+                (s = awaitDone(true, unit.toNanos(timeout))) <= COMPLETING)
+            throw new TimeoutException();
+        return report(s);
+    }
+
+
     /**
      * Returns result or throws exception for completed task.
      *
@@ -98,29 +169,7 @@ public class FutureTask_<V> implements RunnableFuture_<V> {
         return true;
     }
 
-    /**
-     * @throws CancellationException {@inheritDoc}
-     */
-    public V get() throws InterruptedException, ExecutionException {
-        int s = state;
-        if (s <= COMPLETING)
-            s = awaitDone(false, 0L);
-        return report(s);
-    }
 
-    /**
-     * @throws CancellationException {@inheritDoc}
-     */
-    public V get(long timeout, TimeUnit unit)
-            throws InterruptedException, ExecutionException, TimeoutException {
-        if (unit == null)
-            throw new NullPointerException();
-        int s = state;
-        if (s <= COMPLETING &&
-                (s = awaitDone(true, unit.toNanos(timeout))) <= COMPLETING)
-            throw new TimeoutException();
-        return report(s);
-    }
 
     /**
      * Protected method invoked when this task transitions to state
@@ -142,13 +191,7 @@ public class FutureTask_<V> implements RunnableFuture_<V> {
      *
      * @param v the value
      */
-    protected void set(V v) {
-        if (UNSAFE.compareAndSwapInt(this, stateOffset, NEW, COMPLETING)) {
-            outcome = v;
-            UNSAFE.putOrderedInt(this, stateOffset, NORMAL); // final state
-            finishCompletion();
-        }
-    }
+
 
     /**
      * Causes this future to report an {@link ExecutionException}
@@ -168,38 +211,7 @@ public class FutureTask_<V> implements RunnableFuture_<V> {
         }
     }
 
-    public void run() {
-        if (state != NEW ||
-                !UNSAFE.compareAndSwapObject(this, runnerOffset,
-                        null, Thread.currentThread()))
-            return;
-        try {
-            Callable<V> c = callable;
-            if (c != null && state == NEW) {
-                V result;
-                boolean ran;
-                try {
-                    result = c.call();
-                    ran = true;
-                } catch (Throwable ex) {
-                    result = null;
-                    ran = false;
-                    setException(ex);
-                }
-                if (ran)
-                    set(result);
-            }
-        } finally {
-            // runner must be non-null until state is settled to
-            // prevent concurrent calls to run()
-            runner = null;
-            // state must be re-read after nulling runner to prevent
-            // leaked interrupts
-            int s = state;
-            if (s >= INTERRUPTING)
-                handlePossibleCancellationInterrupt(s);
-        }
-    }
+
 
     /**
      * Executes the computation without setting its result, and then
@@ -321,18 +333,22 @@ public class FutureTask_<V> implements RunnableFuture_<V> {
             }
 
             int s = state;
+            //已返回结果 那么退出循环
             if (s > COMPLETING) {
                 if (q != null)
                     q.thread = null;
                 return s;
             }
+            //结果未准备好   但未超时 那么继续等待
             else if (s == COMPLETING) // cannot time out yet
                 Thread.yield();
+            //等待队列为空
             else if (q == null)
                 q = new FutureTask_.WaitNode();
             else if (!queued)
                 queued = UNSAFE.compareAndSwapObject(this, waitersOffset,
                         q.next = waiters, q);
+            //超时 那么退出
             else if (timed) {
                 nanos = deadline - System.nanoTime();
                 if (nanos <= 0L) {

@@ -1,5 +1,9 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.promise;
 
+import org.liuzhugu.javastudy.sourcecode.jdk8.concurrent.FutureTask_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.concurrent.Future_;
+import org.liuzhugu.javastudy.sourcecode.jdk8.concurrent.Thread_;
+
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
@@ -13,8 +17,8 @@ public class CloudUploaderPromisor {
      * @param cloudSyncConfig  云盘同步时的配置
      * @return 云盘同步时的promise凭据对象
      * */
-    public static Future<CloudUploader> newCloudUploaderPromise(CloudSyncConfig cloudSyncConfig) {
-        FutureTask<CloudUploader> futureTask = new FutureTask<CloudUploader>(() -> {
+    public static Future_<CloudUploader> newCloudUploaderPromise(CloudSyncConfig cloudSyncConfig) {
+        FutureTask_<CloudUploader> futureTask = new FutureTask_<CloudUploader>(() -> {
             DefaultCloudUploader defaultCloudUploader = new DefaultCloudUploader();
             System.out.println("开始创建云盘的连接");
             defaultCloudUploader.init(cloudSyncConfig.getCloudAddress(),
@@ -25,7 +29,7 @@ public class CloudUploaderPromisor {
         });
 
         //这里模拟一下后台线程去初始化client，正常是线程池模式
-        new Thread(futureTask).start();
+        new Thread_(futureTask).start();
 
         return futureTask;
     }
