@@ -1,16 +1,17 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.promise;
 
+import org.liuzhugu.javastudy.sourcecode.jdk8.concurrent.Future_;
+
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
+
 
 public class CloudClient {
     public static void main(String[] args) {
         //1.初始化创建本地client和server端的ftp连接
         //因为与云盘建立网络连接是很慢的过程   这里异步化地去执行  云盘任务继续做其他
         CloudSyncConfig cloudSyncConfig = new CloudSyncConfig("","","","");
-        Future<CloudUploader> cloudUploaderFuture = CloudUploaderPromisor.newCloudUploaderPromise(cloudSyncConfig);
+        Future_<CloudUploader> cloudUploaderFuture = CloudUploaderPromisor.newCloudUploaderPromise(cloudSyncConfig);
 
         //2.扫描本地的文件
         StorageManager storageManager = StorageManager.getInstance();
