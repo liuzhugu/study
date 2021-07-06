@@ -9,8 +9,42 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 
 public class ThreadPoolExecutor_ extends AbstractExecutorService_ {
-    
-    
+
+    /**
+     * @param corePoolSize 核心线程数  小于核心线程数时  对于新任务都是创建线程来运行
+     * @param workQueue 任务队列  当线程数等于核心线程数后   新来的任务放入队列
+     * @param maximumPoolSize  最大线程数  当任务队列也放满之后  对新任务创建新线程来处理
+     * @param handler 拒绝策略   任务队列满了  线程数也达到了最大了   那么新任务交给拒绝策略处理
+     * @param keepAliveTime  空闲等待时间  非核心线程在空闲等待时间超出该时间时  回收该线程
+     * @param ThreadFactory_  线程工程   通过线程工程创建新线程
+     *
+     * */
+    public ThreadPoolExecutor_(int corePoolSize,
+                               int maximumPoolSize,
+                               long keepAliveTime,
+                               TimeUnit unit,
+                               BlockingQueue<Runnable_> workQueue,
+                               ThreadFactory_ ThreadFactory_,
+                               RejectedExecutionHandler_ handler) {
+        if (corePoolSize < 0 ||
+                maximumPoolSize <= 0 ||
+                maximumPoolSize < corePoolSize ||
+                keepAliveTime < 0)
+            throw new IllegalArgumentException();
+        if (workQueue == null || ThreadFactory_ == null || handler == null)
+            throw new NullPointerException();
+        this.acc = System.getSecurityManager() == null ?
+                null :
+                AccessController.getContext();
+        this.corePoolSize = corePoolSize;
+        this.maximumPoolSize = maximumPoolSize;
+        this.workQueue = workQueue;
+        this.keepAliveTime = unit.toNanos(keepAliveTime);
+        this.ThreadFactory_ = ThreadFactory_;
+        this.handler = handler;
+    }
+
+
     private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));
     private static final int COUNT_BITS = Integer.SIZE - 3;
     private static final int CAPACITY   = (1 << COUNT_BITS) - 1;
@@ -246,7 +280,7 @@ public class ThreadPoolExecutor_ extends AbstractExecutorService_ {
          * Creates with given first task and thread from ThreadFactory_.
          * @param firstTask the first task (null if none)
          */
-        Worker(Runnable_ firstTask) {
+        public Worker(Runnable_ firstTask) {
             setState(-1); // inhibit interrupts until runWorker
             this.firstTask = firstTask;
             this.thread = getThreadFactory().newThread(this);
@@ -725,50 +759,8 @@ public class ThreadPoolExecutor_ extends AbstractExecutorService_ {
         }
     }
 
-    /**
-     * Main worker run loop.  Repeatedly gets tasks from queue and
-     * executes them, while coping with a number of issues:
-     *
-     * 1. We may start out with an initial task, in which case we
-     * don't need to get the first one. Otherwise, as long as pool is
-     * running, we get tasks from getTask. If it returns null then the
-     * worker exits due to changed pool state or configuration
-     * parameters.  Other exits result from exception throws in
-     * external code, in which case completedAbruptly holds, which
-     * usually leads processWorkerExit to replace this thread.
-     *
-     * 2. Before running any task, the lock is acquired to prevent
-     * other pool interrupts while the task is executing, and then we
-     * ensure that unless pool is stopping, this thread does not have
-     * its interrupt set.
-     *
-     * 3. Each task run is preceded by a call to beforeExecute, which
-     * might throw an exception, in which case we cause thread to die
-     * (breaking loop with completedAbruptly true) without processing
-     * the task.
-     *
-     * 4. Assuming beforeExecute completes normally, we run the task,
-     * gathering any of its thrown exceptions to send to afterExecute.
-     * We separately handle RuntimeException, Error (both of which the
-     * specs guarantee that we trap) and arbitrary Throwables.
-     * Because we cannot rethrow Throwables within Runnable_.run, we
-     * wrap them within Errors on the way out (to the thread's
-     * UncaughtExceptionHandler).  Any thrown exception also
-     * conservatively causes thread to die.
-     *
-     * 5. After task.run completes, we call afterExecute, which may
-     * also throw an exception, which will also cause thread to
-     * die. According to JLS Sec 14.20, this exception is the one that
-     * will be in effect even if task.run throws.
-     *
-     * The net effect of the exception mechanics is that afterExecute
-     * and the thread's UncaughtExceptionHandler have as accurate
-     * information as we can provide about any problems encountered by
-     * user code.
-     *
-     * @param w the worker
-     */
-    final void runWorker(ThreadPoolExecutor_.Worker w) {
+
+    public final void runWorker(ThreadPoolExecutor_.Worker w) {
         Thread wt = Thread.currentThread();
         Runnable_ task = w.firstTask;
         w.firstTask = null;
@@ -917,57 +909,7 @@ public class ThreadPoolExecutor_ extends AbstractExecutorService_ {
                 Executors_.defaultThreadFactory(), handler);
     }
 
-    /**
-     * Creates a new {@code ThreadPoolExecutor_} with the given initial
-     * parameters.
-     *
-     * @param corePoolSize the number of threads to keep in the pool, even
-     *        if they are idle, unless {@code allowCoreThreadTimeOut} is set
-     * @param maximumPoolSize the maximum number of threads to allow in the
-     *        pool
-     * @param keepAliveTime when the number of threads is greater than
-     *        the core, this is the maximum time that excess idle threads
-     *        will wait for new tasks before terminating.
-     * @param unit the time unit for the {@code keepAliveTime} argument
-     * @param workQueue the queue to use for holding tasks before they are
-     *        executed.  This queue will hold only the {@code Runnable_}
-     *        tasks submitted by the {@code execute} method.
-     * @param ThreadFactory_ the factory to use when the executor
-     *        creates a new thread
-     * @param handler the handler to use when execution is blocked
-     *        because the thread bounds and queue capacities are reached
-     * @throws IllegalArgumentException if one of the following holds:<br>
-     *         {@code corePoolSize < 0}<br>
-     *         {@code keepAliveTime < 0}<br>
-     *         {@code maximumPoolSize <= 0}<br>
-     *         {@code maximumPoolSize < corePoolSize}
-     * @throws NullPointerException if {@code workQueue}
-     *         or {@code ThreadFactory_} or {@code handler} is null
-     */
-    public ThreadPoolExecutor_(int corePoolSize,
-                              int maximumPoolSize,
-                              long keepAliveTime,
-                              TimeUnit unit,
-                              BlockingQueue<Runnable_> workQueue,
-                              ThreadFactory_ ThreadFactory_,
-                              RejectedExecutionHandler_ handler) {
-        if (corePoolSize < 0 ||
-                maximumPoolSize <= 0 ||
-                maximumPoolSize < corePoolSize ||
-                keepAliveTime < 0)
-            throw new IllegalArgumentException();
-        if (workQueue == null || ThreadFactory_ == null || handler == null)
-            throw new NullPointerException();
-        this.acc = System.getSecurityManager() == null ?
-                null :
-                AccessController.getContext();
-        this.corePoolSize = corePoolSize;
-        this.maximumPoolSize = maximumPoolSize;
-        this.workQueue = workQueue;
-        this.keepAliveTime = unit.toNanos(keepAliveTime);
-        this.ThreadFactory_ = ThreadFactory_;
-        this.handler = handler;
-    }
+
 
     /**
      * Executes the given task sometime in the future.  The task
@@ -1008,18 +950,26 @@ public class ThreadPoolExecutor_ extends AbstractExecutorService_ {
          */
         int c = ctl.get();
         if (workerCountOf(c) < corePoolSize) {
+            //线程数未达到核心线程数的时候  创建新线程执行任务
             if (addWorker(command, true))
                 return;
             c = ctl.get();
         }
+        //如果线程池处于running状态  将任务添加到等待队列
         if (isRunning(c) && workQueue.offer(command)) {
             int recheck = ctl.get();
+            //如果线程池不处于running状态  将任务从等待队列中删除
             if (! isRunning(recheck) && remove(command))
+                //拒绝任务
                 reject(command);
             else if (workerCountOf(recheck) == 0)
+                //如果当前线程池中一个线程也没有  那么添加一个执行线程
                 addWorker(null, false);
         }
+        //如果线程池不处于running状态(可能处于线程数大于核心线程数   但小于或等于最大线程数)并且队列已满
+        //尝试着增加线程  如果增加失败  那么证明线程数等于最大线程数
         else if (!addWorker(command, false))
+            //线程数已满  队列也满了  只能拒绝了
             reject(command);
     }
 
