@@ -161,17 +161,7 @@ public class Executors_ {
     }
 
     /**
-     * Creates a single-threaded executor that can schedule commands
-     * to run after a given delay, or to execute periodically.
-     * (Note however that if this single
-     * Thread_ terminates due to a failure during execution prior to
-     * shutdown, a new one will take its place if needed to execute
-     * subsequent tasks.)  Tasks are guaranteed to execute
-     * sequentially, and no more than one task will be active at any
-     * given time. Unlike the otherwise equivalent
-     * {@code newScheduledThreadPool(1)} the returned executor is
-     * guaranteed not to be reconfigurable to use additional threads.
-     * @return the newly created scheduled executor
+     * 线程池大小为1的可定时调度的任务线程池
      */
     public static ScheduledExecutorService_ newSingleThreadScheduledExecutor() {
         return new Executors_.DelegatedScheduledExecutorService

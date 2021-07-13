@@ -5,6 +5,7 @@ import org.liuzhugu.javastudy.course.ruyuanconcurrent.productandconsumer.HouseCo
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.productandconsumer.ProduceConsumer;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.promise.CloudClient;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.securitysystem.SecuritySystem;
+import org.liuzhugu.javastudy.course.ruyuanconcurrent.threadpool.ExecutorsStudy;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination.ClientHandler;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination.ConcreteTerminatableThread;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination.RuYuanClient;
@@ -40,10 +41,13 @@ public class Study {
         //  解耦生产者和消费者  异步   缓冲
         ProduceConsumer produceConsumer = new ProduceConsumer();
         HouseContractAttachmentProcessor processor = new HouseContractAttachmentProcessor();
-        //  线程池
+        //6.线程池
+            //创建参数
         ThreadPoolExecutor_ executor = new ThreadPoolExecutor_(10, 10,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable_>(),null,null);
         executor.runWorker(null);
+            //创建线程池方式
+        ExecutorsStudy executorsStudy = new ExecutorsStudy();
     }
 }
