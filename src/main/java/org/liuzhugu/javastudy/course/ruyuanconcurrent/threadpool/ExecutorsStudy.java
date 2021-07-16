@@ -2,7 +2,35 @@ package org.liuzhugu.javastudy.course.ruyuanconcurrent.threadpool;
 
 import org.liuzhugu.javastudy.sourcecode.jdk8.concurrent.Executors_;
 
+import java.util.concurrent.*;
+
 public class ExecutorsStudy {
+
+    //适合IO密集型的线程池
+    private static final ExecutorService ORDER_SYNC_THREAD_POOL =
+            new ThreadPoolExecutor(
+                    //核心线程尽量和机器的CPU数符合
+                    Runtime.getRuntime().availableProcessors() + 1,
+                    //因为是IO密集型  所以可以多创建线程应对任务较多的情况
+                    Runtime.getRuntime().availableProcessors() * 2,
+                    60,
+                    TimeUnit.SECONDS,
+                    //指定容量的有界队列
+                    new LinkedBlockingQueue<>(500),
+                    new ThreadFactory() {
+                        @Override
+                        public Thread newThread(Runnable r) {
+                            //个性化的线程名称   更容易定位
+                            Thread thread = new Thread(r,"sync-order-info-thread-pool");
+                            thread.setDaemon(true);
+                            return thread;
+                        }
+                    },
+                    //只要线程还没有关闭  那么直接在提交任务的用户线程中运行当前任务
+                    // 这样做任务 不会被丢弃   但是可能阻塞用户线程上的其他任务   造成业务性能下降
+                    new ThreadPoolExecutor.CallerRunsPolicy()
+            );
+
     public static void main(String[] args) {
         //1.只有一个线程的线程池
         Executors_.newSingleThreadExecutor();
@@ -15,5 +43,6 @@ public class ExecutorsStudy {
         Executors_.newSingleThreadScheduledExecutor();
         //5.可指定核心线程数的可定是调度的任务线程池
         Executors_.newScheduledThreadPool(10);
+
     }
 }
