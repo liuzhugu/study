@@ -1637,8 +1637,7 @@ public class ThreadPoolExecutor_ extends AbstractExecutorService_ {
     }
 
     /**
-     * A handler for rejected tasks that silently discards the
-     * rejected task.
+     * 空实现  默认不做任何处理
      */
     public static class DiscardPolicy implements RejectedExecutionHandler_ {
         /**
