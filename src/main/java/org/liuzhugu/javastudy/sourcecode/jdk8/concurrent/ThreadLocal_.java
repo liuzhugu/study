@@ -5,6 +5,9 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
+/**
+ * mustWatch ThreadLocal
+ * */
 public class ThreadLocal_<T> {
     /**
      * ThreadLocals rely on per-Thread_ linear-probe hash maps attached
@@ -83,17 +86,15 @@ public class ThreadLocal_<T> {
     }
 
     /**
-     * Returns the value in the current Thread_'s copy of this
-     * Thread_-local variable.  If the variable has no value for the
-     * current Thread_, it is first initialized to the value returned
-     * by an invocation of the {@link #initialValue} method.
-     *
-     * @return the current Thread_'s value of this Thread_-local
+     * $获取值
      */
     public T get() {
         Thread_ t = Thread_.currentThread();
+        //从线程对象身上获取对应的map  相当于自带酒水
         ThreadLocal_.ThreadLocalMap map = getMap(t);
         if (map != null) {
+            //每个线程可以有多个ThreadLocal
+            // 每个ThreadLocal根据自己的哈希值从ThreadLocalMap中获取自己对应的value
             ThreadLocal_.ThreadLocalMap.Entry e = map.getEntry(this);
             if (e != null) {
                 @SuppressWarnings("unchecked")
@@ -164,6 +165,7 @@ public class ThreadLocal_<T> {
      * @return the map
      */
     ThreadLocal_.ThreadLocalMap getMap(Thread_ t) {
+        //变量放在访问者身上   该类是无状态的
         return t.threadLocals;
     }
 
@@ -255,8 +257,7 @@ public class ThreadLocal_<T> {
         private static final int INITIAL_CAPACITY = 16;
 
         /**
-         * The table, resized as necessary.
-         * table.length MUST always be a power of two.
+         *   Thread对象 -> ThreadLocalMap -> 多个Entry(每个Entry对应于一个ThreadLocal)
          */
         private ThreadLocal_.ThreadLocalMap.Entry[] table;
 
@@ -345,11 +346,13 @@ public class ThreadLocal_<T> {
          * @return the entry associated with key, or null if no such
          */
         private ThreadLocal_.ThreadLocalMap.Entry getEntry(ThreadLocal_<?> key) {
+            //thread上多个threadLocal   每个threadLocal根据自己的哈希值从ThreadLocalMap中定位自己的value
             int i = key.threadLocalHashCode & (table.length - 1);
             ThreadLocal_.ThreadLocalMap.Entry e = table[i];
             if (e != null && e.get() == key)
                 return e;
             else
+                //链表法解决哈希冲突
                 return getEntryAfterMiss(key, i, e);
         }
 

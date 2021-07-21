@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 
 /**
- * mustWatch 线程池源码
+ * mustWatch 线程池
  * */
 
 public class ThreadPoolExecutor_ extends AbstractExecutorService_ {
