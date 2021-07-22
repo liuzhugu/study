@@ -5,6 +5,7 @@ import org.liuzhugu.javastudy.course.ruyuanconcurrent.productandconsumer.HouseCo
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.productandconsumer.ProduceConsumer;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.promise.CloudClient;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.securitysystem.SecuritySystem;
+import org.liuzhugu.javastudy.course.ruyuanconcurrent.threadlocal.UserPasswordSystemManager;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.threadpool.ExecutorsStudy;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination.ClientHandler;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination.ConcreteTerminatableThread;
@@ -23,7 +24,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class Study {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         //1.不可变类模式
         //  不可变就没有并发冲突
         SmsRouter smsRouter = new SmsRouter();
@@ -49,5 +50,8 @@ public class Study {
         executor.runWorker(null);
             //创建线程池方式
         ExecutorsStudy executorsStudy = new ExecutorsStudy();
+        //7.ThreadLocal
+        UserPasswordSystemManager userPasswordSystemManager = UserPasswordSystemManager.getInstance();
+
     }
 }
