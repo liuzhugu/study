@@ -1225,7 +1225,7 @@ public class SecurityManager_ {
      * We have an initial invalid bit (initially false) for the class
      * variables which tell if the cache is valid.  If the underlying
      * java.security.Security property changes via setProperty(), the
-     * Security class uses reflection to change the variable and thus
+     * Security class uses reflect to change the variable and thus
      * invalidate the cache.
      *
      * Locking is handled by synchronization to the
@@ -1451,7 +1451,7 @@ public class SecurityManager_ {
      * relies on the code being checked being at a stack depth of
      * 4.
      *
-     * @param clazz the class that reflection is to be performed on.
+     * @param clazz the class that reflect is to be performed on.
      *
      * @param which type of access, PUBLIC or DECLARED.
      *

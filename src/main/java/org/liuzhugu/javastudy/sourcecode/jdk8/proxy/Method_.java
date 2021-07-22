@@ -41,7 +41,7 @@ public final class Method_ extends Executable_ {
     private Class_<?>            clazz;
     private int                 slot;
     // This is guaranteed to be interned by the VM in the 1.4
-    // reflection implementation
+    // reflect implementation
     private String              name;
     private Class_<?>            returnType;
     private Class_<?>[]          parameterTypes;

@@ -1,4 +1,4 @@
-package org.liuzhugu.javastudy.practice.rpc;
+package org.liuzhugu.javastudy.practice.rpc.simple;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

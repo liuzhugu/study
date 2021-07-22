@@ -1,84 +1,57 @@
 package org.liuzhugu.javastudy.book.logicjava.generic;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Random;
 
 public class Test {
-    public static void main(String[] args) throws Exception{
 
-        //根据类名获取class对象
-        Class<Date> dateClass = Date.class;
-
-        //接口也有class对象
-        Class<Comparable> comparableClass = Comparable.class;
-
-        //根据对象获取class对象
-        Date date = new Date();
-        Class<? extends Date> dateClass1 = date.getClass();
-
-        //根据类名加载class对象
-        try {
-            Class<?> cls = Class.forName("java.util.HashMap");
-            System.out.println(cls.getName());
-        }catch (Exception e){}
-
-        //对于private字段要先关闭检查机制才能运行
-        List<String> obj = Arrays.asList(new String[]{"老马","编程"});
-        Class<?> cls = obj.getClass();
-        //遍历字段
-        for (Field field : cls.getDeclaredFields()) {
-            field.setAccessible(true);
-            System.out.println(field.getName() + " - " + field.get(obj));
-        }
-
-
-        Class<?> integerClass = Integer.class;
-        try {
-            //根据方法名和参数列表获取方法
-            Method method = integerClass.getMethod("parseInt", new Class[]{String.class});
-            //调用方法
-            System.out.println(method.invoke(null,"123"));
-        }catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        //通过class的newInstance方法创建对象,其实相当于直接调用无参构造方法
-        Map<String,Integer> map = HashMap.class.newInstance();
-        map.put("hello",123);
-
-        //检查类型
-        List<String> list = new ArrayList<>();
-
-        //通过关键字判断
-        if (list instanceof ArrayList) {
-            System.out.println("array list");
-        }
-
-        //根据传值动态决定
-        Class clazz = Class.forName("java.util.ArrayList");
-        if (clazz.isInstance(list)) {
-            System.out.println("array list");
-        }
-
-        //强制类型转换
-        //事先知道类型
-        List<String> stringList = new ArrayList<>();
-        if (stringList instanceof ArrayList) {
-            ArrayList arrayList = (ArrayList)stringList;
-        }
-        //动态
-//        public static <T> T toType(Object obj,Class<T> cls){
-//            return cls.cast(obj);
+    public static void main(String[] args) {
+//        Pair<String,Integer> pair = new Pair<>("liuzhugu",1);
+//        //类型检查 提前报错
+//        //Integer id = pair.getFirst();
+//        //String value = pair.getSecond();
+//
+//        //动态数组
+//        DynamicArray<Double> arr = new DynamicArray<>();
+//        Random random = new Random();
+//        int size = random.nextInt(100);
+//        for (int i = 0;i < size;i ++) {
+//            arr.add(Math.random());
 //        }
+//        System.out.println(arr.get(random.nextInt(size)));
 
-        //获取数组元素类型
-        String[] arr = new String[]{};
-        System.out.println(arr.getClass().getComponentType());
+        //方法不需要提前声明类型 每次都可以传入不同类型
+//        makePair("liuzhugu",1);
+//        makePair(1,"liuzhugu");
+
+//        //子类实现接口时声明了类型 那么子类不需要参数实例化了
+//        ChildTwo childTwo = new ChildTwo();
+//        childTwo.sayHello(" liuzhugu");
+//        //子类不声明类型  因此使用子类时 还是需要传参数类型
+//        ChildOne<String> first = new ChildOne<>();
+//        first.sayHello("liuzhugu");
+//        ChildOne<Integer> second = new ChildOne<>();
+//        second.sayHello(1);
+
+//        NumberPair<Integer,Double> pair = new NumberPair<>(10,12.34);
+//        System.out.println(pair.sum());
+//
+//        DynamicArray<Number> numbers = new DynamicArray<>();
+//        DynamicArray<Integer> integers = new DynamicArray<>();
+//        integers.add(100);
+//        integers.add(34);
+//        numbers.addAll(integers);
+
+        DynamicArray<Number> numbers = new DynamicArray<>();
+        DynamicArray<Integer> integers = new DynamicArray<>();
+        integers.add(100);
+        integers.add(34);
+        integers.copyTo(numbers);
+
+    }
+
+
+    public static <U,V> Pair<U,V> makePair(U first,V second) {
+        Pair<U,V> pair = new Pair<>(first,second);
+        return pair;
     }
 }

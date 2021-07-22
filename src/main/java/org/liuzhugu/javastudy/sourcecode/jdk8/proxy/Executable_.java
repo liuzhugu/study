@@ -289,7 +289,7 @@ public abstract class Executable_ extends AccessibleObject_
                 }
             } else {
                 // Otherwise, use the non-generic Parameter_ data.
-                // Without method Parameter_ reflection data, we have
+                // Without method Parameter_ reflect data, we have
                 // no way to figure out which parameters are
                 // synthetic/mandated, thus, no way to match up the
                 // indexes.

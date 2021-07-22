@@ -1,6 +1,6 @@
-package org.liuzhugu.javastudy.practice.rpc;
+package org.liuzhugu.javastudy.practice.rpc.simple;
 
-import org.liuzhugu.javastudy.practice.rpc.service.HelloService;
+import org.liuzhugu.javastudy.practice.rpc.simple.service.HelloService;
 
 /**
  * 引用服务

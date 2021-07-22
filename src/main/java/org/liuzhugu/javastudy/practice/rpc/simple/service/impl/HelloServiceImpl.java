@@ -1,6 +1,6 @@
-package org.liuzhugu.javastudy.practice.rpc.service.impl;
+package org.liuzhugu.javastudy.practice.rpc.simple.service.impl;
 
-import org.liuzhugu.javastudy.practice.rpc.service.HelloService;
+import org.liuzhugu.javastudy.practice.rpc.simple.service.HelloService;
 
 public class HelloServiceImpl implements HelloService {
 
