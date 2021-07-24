@@ -1,6 +1,7 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.promise;
 
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public final class StorageManager {
     private static final StorageManager INSTANCE = new StorageManager();
 
     //无法通过构造器创建对象
-    protected StorageManager() {
+    private StorageManager() {
 
     }
 
@@ -23,7 +24,16 @@ public final class StorageManager {
         return INSTANCE;
     }
 
+    /**
+     * 扫描本地需要同步的文件
+     *
+     * @return
+     */
     public List<FileInfo> scanLocalFile() {
-        return null;
-    }
-}
+        // 模拟需要同步到个人云盘的文件
+        FileInfo fileInfo = new FileInfo();
+        fileInfo.setFile("abc".getBytes());
+        fileInfo.setFileName("abc.txt");
+        fileInfo.setFileSize(fileInfo.getFile().length);
+        return Collections.singletonList(fileInfo);
+    }}

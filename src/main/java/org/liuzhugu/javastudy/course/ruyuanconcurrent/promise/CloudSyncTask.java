@@ -1,30 +1,37 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.promise;
 
-import org.liuzhugu.javastudy.sourcecode.jdk8.concurrent.Future_;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+/**
+ * Description:个人云盘本地和远程同步定时任务
+ **/
+public class CloudSyncTask implements Runnable {
+    //个人云盘同步的配置信息
+    private final CloudSyncConfig cloudSyncConfig;
 
-public class CloudClient {
-    public static void main(String[] args) {
-        //1.初始化创建本地client和server端的ftp连接
-        //因为与云盘建立网络连接是很慢的过程   这里异步化地去执行  云盘任务继续做其他
-        CloudSyncConfig cloudSyncConfig = new CloudSyncConfig("","","","");
+    public CloudSyncTask(CloudSyncConfig cloudSyncConfig) {
+        this.cloudSyncConfig = cloudSyncConfig;
+    }
+
+    @Override
+    public void run() {
+        //初始化创建本地client和server端的ftp连接
+        //因为与云盘建立网络连接是很慢的一个过程   这里异步化地区执行  云盘任务继续去做别的事情
         Future<CloudUploader> cloudUploaderFuture = CloudUploaderPromisor.newCloudUploaderPromise(cloudSyncConfig);
 
-        //2.扫描本地的文件
+        //扫描本地的文件
         StorageManager storageManager = StorageManager.getInstance();
         List<FileInfo> fileInfos = storageManager.scanLocalFile();
-        System.out.println("扫描本地需要同步的文件完成");
+        System.out.println("完成扫描本地需要同步的文件");
 
-        //3.获取云盘初始化的client
+        //获取初始化好的云盘client
         CloudUploader cloudUploader = null;
         try {
             System.out.println("同步阻塞等待云盘连接建立进行文件上传");
             cloudUploader = cloudUploaderFuture.get();
-            System.out.println("获取云盘连接成功");
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -33,16 +40,16 @@ public class CloudClient {
             return;
         }
 
-        //4.开始同步文件到云盘上去
+        //开始同步文件到云盘去
         syncFile(cloudUploader,fileInfos);
-        System.out.println("所有文件上传完成");
+        System.out.println("所有文件都文件上传完成");
 
-        //5.都上传完成，关闭连接
+        //都上传完成  关闭连接
         cloudUploader.disconnect();
-        System.out.println("关闭云盘连接");
-    }
+        System.out.println("关闭云盘的连接");
 
-    private static void syncFile(CloudUploader cloudUploader,List<FileInfo> fileInfos) {
+    }
+    private void syncFile(CloudUploader cloudUploader,List<FileInfo> fileInfos) {
         fileInfos.forEach(fileInfo -> {
             try {
                 cloudUploader.upload(fileInfo);
