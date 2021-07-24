@@ -83,7 +83,18 @@ public class ConditionVarBlocker implements Blocker {
         lock.lockInterruptibly();
         try {
             condition.signal();
+        } finally {
+            lock.unlock();
+        }
+    }
 
+    @Override
+    public void broadcastAfter(Callable<Boolean> stateOperation) throws Exception {
+        lock.lockInterruptibly();
+        try {
+            if (stateOperation.call()) {
+                condition.signalAll();
+            }
         } finally {
             lock.unlock();
         }

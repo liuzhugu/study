@@ -15,4 +15,19 @@ public interface Blocker {
      * 该方法才会唤醒被暂挂的线程
      */
     void signalAfter(Callable<Boolean> stateOperaion) throws Exception;
+
+    /**
+     * 直接唤醒blocker上阻塞的一个线程
+     *
+     * @throws Exception
+     */
+    void signal() throws Exception;
+
+    /**
+     * 根据stateOperation的是否满足唤醒所有blocker上线程
+     *
+     * @param stateOperation 状态操作
+     * @throws Exception
+     */
+    void broadcastAfter(Callable<Boolean> stateOperation) throws Exception;
 }

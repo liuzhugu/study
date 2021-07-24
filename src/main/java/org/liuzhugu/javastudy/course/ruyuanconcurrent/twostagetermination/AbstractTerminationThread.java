@@ -10,8 +10,14 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
 
     public final TerminationToken terminationToken;
 
+    public AbstractTerminationThread() {
+        this(new TerminationToken());
+    }
+
     public AbstractTerminationThread(TerminationToken terminationToken) {
         this.terminationToken = terminationToken;
+        System.out.println("注册警告线程到线程停止的标志实现对象队列中");
+        terminationToken.register(this);
     }
 
 
@@ -27,8 +33,9 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
         try {
             for (;;) {
                 //死循环  先判断中断实例的标识是否为true 并且有没有未完成的任务
-                System.out.println("告警线程执行，此时中断标志位: " + terminationToken);
-                if (terminationToken.isToShutdown() && terminationToken.reserva) {
+                System.out.println("告警线程执行，此时中断标志位: " + terminationToken.isToShutdowm()
+                        + ",未完成的任务数量:" + terminationToken.reservations.get());
+                if (terminationToken.isToShutdowm() && terminationToken.reservations.get() <= 0) {
                     //线程已经终止   中断线程退出
                     System.out.println("中断标志位true，未完成任务为0，告警线程退出");
                     break;
@@ -36,6 +43,13 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
 
                 //执行具体的业务逻辑
                 doRun();
+            }
+        } catch (Exception e) {
+            //中断线程可能调用interrupt被中断
+            ex = e;
+            if (e instanceof InterruptedException) {
+                //中断线程相应退出
+                System.out.println("中断响应:" + e);
             }
         } finally {
             try {
@@ -50,29 +64,42 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
     }
 
     public void terminate() {
-        try {
-            TerminationToken.getInstance().setRunning(false);
-            doTerminate();
-        } catch (Exception e) {
+        //设置标志实例对象为true
+        System.out.println("设置中断标志对象为中断状态");
+        this.terminationToken.setToShutdowm(true);
 
+        try {
+            doTerminate();
+        } finally {
+            //如果没有等待任务  则强制去停止任务
+            if (terminationToken.reservations.get() <= 0) {
+                super.interrupt();
+            }
         }
     }
 
     /**
-     * 真正的业务逻辑
-     * */
-    public abstract void doRun();
-
-    /**
-     * 清理工作
-     * */
-    public abstract void doClean(Exception e);
-
-
+     * 留给子类去实现具体的线程业务逻辑
+     */
+    protected abstract void doRun() throws InterruptedException;
 
 
     /**
-     * 中断方法
-     * */
-    public abstract void doTerminate();
+     * 留给子类去实现，完成线程终止后的一些清理动作
+     *
+     * @param ex
+     */
+    protected void doClean(Exception ex) {
+
+    }
+
+
+
+
+    /**
+     * 执行终止线程的逻辑 留个子类去具体的实现
+     */
+    protected void doTerminate() {
+
+    }
 }

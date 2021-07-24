@@ -336,34 +336,22 @@ public class ThreadLocal_<T> {
         }
 
         /**
-         * Get the entry associated with key.  This method
-         * itself handles only the fast path: a direct hit of existing
-         * key. It otherwise relays to getEntryAfterMiss.  This is
-         * designed to maximize performance for direct hits, in part
-         * by making this method readily inlinable.
-         *
-         * @param  key the Thread_ local object
-         * @return the entry associated with key, or null if no such
+         * 获取map上的Entry
          */
         private ThreadLocal_.ThreadLocalMap.Entry getEntry(ThreadLocal_<?> key) {
             //thread上多个threadLocal   每个threadLocal根据自己的哈希值从ThreadLocalMap中定位自己的value
             int i = key.threadLocalHashCode & (table.length - 1);
             ThreadLocal_.ThreadLocalMap.Entry e = table[i];
+            //因为Entry的key是弱引用   所以内存回收时会被回收掉   因此每次使用key时都需要判断一下
             if (e != null && e.get() == key)
                 return e;
             else
-                //链表法解决哈希冲突
+                //key被回收掉之后
                 return getEntryAfterMiss(key, i, e);
         }
 
         /**
-         * Version of getEntry method for use when key is not found in
-         * its direct hash slot.
-         *
-         * @param  key the Thread_ local object
-         * @param  i the table index for key's hash code
-         * @param  e the entry at table[i]
-         * @return the entry associated with key, or null if no such
+         * $ 作为key的ThreadLocal被回收之后
          */
         private ThreadLocal_.ThreadLocalMap.Entry getEntryAfterMiss(ThreadLocal_<?> key, int i, ThreadLocal_.ThreadLocalMap.Entry e) {
             ThreadLocal_.ThreadLocalMap.Entry[] tab = table;
@@ -374,6 +362,7 @@ public class ThreadLocal_<T> {
                 if (k == key)
                     return e;
                 if (k == null)
+                    //清除Key被回收的Entry
                     expungeStaleEntry(i);
                 else
                     i = nextIndex(i, len);
@@ -422,7 +411,7 @@ public class ThreadLocal_<T> {
         }
 
         /**
-         * Remove the entry for key.
+         * 删除ThreadLocal   顺便清除一下被回收Key的Entry
          */
         private void remove(ThreadLocal_<?> key) {
             ThreadLocal_.ThreadLocalMap.Entry[] tab = table;
@@ -513,21 +502,13 @@ public class ThreadLocal_<T> {
         }
 
         /**
-         * Expunge a stale entry by rehashing any possibly colliding entries
-         * lying between staleSlot and the next null slot.  This also expunges
-         * any other stale entries encountered before the trailing null.  See
-         * Knuth, Section 6.4
-         *
-         * @param staleSlot index of slot known to have null key
-         * @return the index of the next null slot after staleSlot
-         * (all between staleSlot and this slot will have been checked
-         * for expunging).
+         * 清除Key被回收的Entry
          */
         private int expungeStaleEntry(int staleSlot) {
             ThreadLocal_.ThreadLocalMap.Entry[] tab = table;
             int len = tab.length;
 
-            // expunge entry at staleSlot
+            // 清除被回收了key的Entry
             tab[staleSlot].value = null;
             tab[staleSlot] = null;
             size--;
@@ -535,6 +516,7 @@ public class ThreadLocal_<T> {
             // Rehash until we encounter null
             ThreadLocal_.ThreadLocalMap.Entry e;
             int i;
+            //遍历  直到碰到第一个Key未被回收的Entry   否则把Key被回收的Entry都给清除了
             for (i = nextIndex(staleSlot, len);
                  (e = tab[i]) != null;
                  i = nextIndex(i, len)) {

@@ -1,5 +1,7 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.threadlocal;
 
+import org.liuzhugu.javastudy.sourcecode.jdk8.concurrent.ThreadLocal_;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
@@ -20,7 +22,7 @@ public class ThreadSpecificSecureRandom {
     /**
      * 定义 线程本地存储SecureRandom对象
      * */
-    private static final ThreadLocal<SecureRandom> SECURE_RANDOM_THREAD_LOCAL = new ThreadLocal<SecureRandom>() {
+    private static final ThreadLocal_<SecureRandom> SECURE_RANDOM_THREAD_LOCAL = new ThreadLocal_<SecureRandom>() {
         @Override
         protected SecureRandom initialValue() {
             SecureRandom secureRandom = null;

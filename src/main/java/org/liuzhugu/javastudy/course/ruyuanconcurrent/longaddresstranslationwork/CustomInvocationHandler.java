@@ -1,8 +1,5 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.longaddresstranslationwork;
 
-import org.checkerframework.checker.units.qual.C;
-import org.liuzhugu.javastudy.practice.concurrent.Executor;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
