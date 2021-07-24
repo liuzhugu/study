@@ -1,9 +1,12 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent;
 
+
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.immutable.SmsRouter;
+import org.liuzhugu.javastudy.course.ruyuanconcurrent.longaddresstranslationwork.ArticleAccessTest;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.productandconsumer.HouseContractAttachmentProcessor;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.productandconsumer.ProduceConsumer;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.promise.CloudClient;
+import org.liuzhugu.javastudy.course.ruyuanconcurrent.promise.CloudSyncTaskTest;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.securitysystem.SecuritySystem;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.threadlocal.UserPasswordSystemManager;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.threadpool.ExecutorsStudy;
@@ -26,7 +29,7 @@ public class Study {
         SecuritySystem securitySystem = new SecuritySystem();
         //3.二阶段终止模式
         //  相比于直接暴力终止正在运行的线程  通知线程结束  然后线程结束完正在运行的任务以后安全退出更好
-        AlarmManagerTest alarmManagerTest = new AlarmManagerTest();
+        AlarmManagerTest alarmTest = new AlarmManagerTest();
         //4.Promise模式
         //  希望通过异步提高执行效率  但又需要异步执行的结果时
         CloudClient cloudClient = new CloudClient();
@@ -45,5 +48,12 @@ public class Study {
         //7.ThreadLocal
         UserPasswordSystemManager userPasswordSystemManager = UserPasswordSystemManager.getInstance();
 
+
+        //1.智慧制造监控系统
+        AlarmManagerTest alarmManagerTest = new AlarmManagerTest();
+        //2.个人网盘
+        CloudSyncTaskTest cloudSyncTaskTest = new CloudSyncTaskTest();
+        //3.长地址转换
+        ArticleAccessTest articleAccessTest = new ArticleAccessTest();
     }
 }
