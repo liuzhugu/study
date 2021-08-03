@@ -1,6 +1,6 @@
 package org.liuzhugu.javastudy.course.ruyuanjvm;
 
-public class Demo1 {
+public class YoungGCSimulation {
     /**
      * 模拟新生代垃圾回收
      * */

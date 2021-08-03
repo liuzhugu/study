@@ -1,6 +1,6 @@
 package org.liuzhugu.javastudy.course.ruyuanjvm;
 
-public class Demo2 {
+public class FifteenAgeSimulation {
 
     /**
      * 模拟新生代对象达到15之后进入老年代的情况

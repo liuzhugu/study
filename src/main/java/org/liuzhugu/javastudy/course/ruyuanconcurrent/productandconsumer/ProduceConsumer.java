@@ -1,6 +1,5 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.productandconsumer;
 
-import org.checkerframework.checker.units.qual.A;
 import org.liuzhugu.javastudy.sourcecode.jdk8.concurrent.ExecutorService_;
 import org.liuzhugu.javastudy.sourcecode.jdk8.concurrent.Executors_;
 

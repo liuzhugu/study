@@ -1,6 +1,6 @@
 package org.liuzhugu.javastudy.course.ruyuanjvm;
 
-public class Demo {
+public class FullGCSimulation {
     /**
      * 模拟Full GC
      * */

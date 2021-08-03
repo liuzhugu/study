@@ -38,14 +38,14 @@ public class CustomInvocationHandler implements InvocationHandler {
         return future;
     }
 
-    public static <T> T newInstance(Class<T> interfaces,ExecutorService scheduler,Servant servant) {
-        CustomInvocationHandler handler = new CustomInvocationHandler(servant,scheduler);
-        @SuppressWarnings("unchecked")
-        T proxy = (T) Proxy.newProxyInstance(
-                interfaces.getClassLoader(),
-                new Class[]{interfaces},
-                handler
-        );
-        return proxy;
-    }
+//    public static <T> T newInstance(Class<T> interfaces,ExecutorService scheduler,Servant servant) {
+//        CustomInvocationHandler handler = new CustomInvocationHandler(servant,scheduler);
+//        @SuppressWarnings("unchecked")
+//        T proxy = (T) Proxy.newProxyInstance(
+//                interfaces.getClassLoader(),
+//                new Class[]{interfaces},
+//                handler
+//        );
+//        return proxy;
+//    }
 }

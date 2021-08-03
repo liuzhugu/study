@@ -27,6 +27,12 @@ public class Za {
         System.out.println(8981667 * 240);
         double dealerAmount = Integer.parseInt(arg11.replace(".",""))*Integer.parseInt(arg22.replace(".",""))/Math.pow(10,m);
         System.out.println(dealerAmount);
-        System.out.println(new BigDecimal(21556.00).setScale(2, RoundingMode.HALF_UP).compareTo(new BigDecimal(dealerAmount).setScale(2, RoundingMode.HALF_UP))!= 0);
+        System.out.println(BigDecimal.valueOf(21556.00).setScale(2, RoundingMode.HALF_UP).compareTo(BigDecimal.valueOf(dealerAmount).setScale(2, RoundingMode.HALF_UP))!= 0);
+
+        BigDecimal first = BigDecimal.valueOf(arg1);
+        BigDecimal second = BigDecimal.valueOf(arg2);
+        dealerAmount =first.multiply(second).doubleValue();
+        System.out.println(dealerAmount);
+        System.out.println(BigDecimal.valueOf(21556.00).setScale(2, RoundingMode.HALF_UP).compareTo(BigDecimal.valueOf(dealerAmount).setScale(2, RoundingMode.HALF_UP))!= 0);
     }
 }

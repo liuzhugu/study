@@ -1,6 +1,6 @@
 package org.liuzhugu.javastudy.course.ruyuanjvm;
 
-public class Demo4 {
+public class DynamicAgeSimulation {
     /**
      * 模拟动态年龄判断
      * */

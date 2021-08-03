@@ -1,6 +1,6 @@
 package org.liuzhugu.javastudy.course.ruyuanjvm;
 
-public class Demo3 {
+public class BigObjectSimulation {
 
     /**
      * 模拟大对象直接进入老年代的情况

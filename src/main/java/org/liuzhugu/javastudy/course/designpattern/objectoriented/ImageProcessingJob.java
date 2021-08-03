@@ -1,6 +1,5 @@
 package org.liuzhugu.javastudy.course.designpattern.objectoriented;
 
-import org.checkerframework.checker.units.qual.A;
 
 public class ImageProcessingJob {
     private static final String BUCKET_NAME = "ai_images_bucket";

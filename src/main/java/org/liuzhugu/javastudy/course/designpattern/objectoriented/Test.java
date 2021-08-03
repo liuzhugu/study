@@ -1,6 +1,5 @@
 package org.liuzhugu.javastudy.course.designpattern.objectoriented;
 
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.logging.Level;
 
