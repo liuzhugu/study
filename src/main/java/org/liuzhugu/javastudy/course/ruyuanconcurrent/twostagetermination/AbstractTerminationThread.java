@@ -81,7 +81,7 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
     /**
      * 留给子类去实现具体的线程业务逻辑
      */
-    protected abstract void doRun() throws InterruptedException;
+    protected abstract void doRun() throws Exception;
 
 
     /**
