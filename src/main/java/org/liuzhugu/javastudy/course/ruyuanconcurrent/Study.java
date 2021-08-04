@@ -3,6 +3,8 @@ package org.liuzhugu.javastudy.course.ruyuanconcurrent;
 
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.immutable.SmsRouter;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.longaddresstranslationwork.ArticleAccessTest;
+import org.liuzhugu.javastudy.course.ruyuanconcurrent.masterslave.HotCommodityAnalysisMaster;
+import org.liuzhugu.javastudy.course.ruyuanconcurrent.masterslave.HotCommodityTest;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.productandconsumer.HouseContractAttachmentProcessor;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.productandconsumer.ProduceConsumer;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.promise.CloudClient;
@@ -47,7 +49,8 @@ public class Study {
         ExecutorsStudy executorsStudy = new ExecutorsStudy();
         //7.ThreadLocal
         UserPasswordSystemManager userPasswordSystemManager = UserPasswordSystemManager.getInstance();
-
+        //8.主从模式
+        HotCommodityAnalysisMaster master = new HotCommodityAnalysisMaster("");
 
         //1.智慧制造监控系统
         AlarmManagerTest alarmManagerTest = new AlarmManagerTest();
@@ -55,5 +58,8 @@ public class Study {
         CloudSyncTaskTest cloudSyncTaskTest = new CloudSyncTaskTest();
         //3.长地址转换
         ArticleAccessTest articleAccessTest = new ArticleAccessTest();
+        //4.电商平台热点商品分析系统
+        HotCommodityTest hotCommodityTest = new HotCommodityTest();
+        //5.
     }
 }

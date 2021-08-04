@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * mustWatch Executors
+ * */
 public class Executors_ {
 
   
@@ -274,87 +277,87 @@ public class Executors_ {
     }
 
     /**
-     * Returns a {@link Callable} object that, when
+     * Returns a {@link Callable_} object that, when
      * called, runs the given task and returns the given result.  This
      * can be useful when applying methods requiring a
-     * {@code Callable} to an otherwise resultless action.
+     * {@code Callable_} to an otherwise resultless action.
      * @param task the task to run
      * @param result the result to return
      * @param <T> the type of the result
-     * @return a callable object
+     * @return a Callable_ object
      * @throws NullPointerException if task null
      */
-    public static <T> Callable<T> callable(Runnable_ task, T result) {
+    public static <T> Callable_<T> Callable_(Runnable_ task, T result) {
         if (task == null)
             throw new NullPointerException();
         return new Executors_.RunnableAdapter<T>(task, result);
     }
 
     /**
-     * Returns a {@link Callable} object that, when
+     * Returns a {@link Callable_} object that, when
      * called, runs the given task and returns {@code null}.
      * @param task the task to run
-     * @return a callable object
+     * @return a Callable_ object
      * @throws NullPointerException if task null
      */
-    public static Callable<Object> callable(Runnable_ task) {
+    public static Callable_<Object> Callable_(Runnable_ task) {
         if (task == null)
             throw new NullPointerException();
         return new Executors_.RunnableAdapter<Object>(task, null);
     }
 
     /**
-     * Returns a {@link Callable} object that, when
+     * Returns a {@link Callable_} object that, when
      * called, runs the given privileged action and returns its result.
      * @param action the privileged action to run
-     * @return a callable object
+     * @return a Callable_ object
      * @throws NullPointerException if action null
      */
-    public static Callable<Object> callable(final PrivilegedAction<?> action) {
+    public static Callable_<Object> Callable_(final PrivilegedAction<?> action) {
         if (action == null)
             throw new NullPointerException();
-        return new Callable<Object>() {
+        return new Callable_<Object>() {
             public Object call() { return action.run(); }};
     }
 
     /**
-     * Returns a {@link Callable} object that, when
+     * Returns a {@link Callable_} object that, when
      * called, runs the given privileged exception action and returns
      * its result.
      * @param action the privileged exception action to run
-     * @return a callable object
+     * @return a Callable_ object
      * @throws NullPointerException if action null
      */
-    public static Callable<Object> callable(final PrivilegedExceptionAction<?> action) {
+    public static Callable_<Object> Callable_(final PrivilegedExceptionAction<?> action) {
         if (action == null)
             throw new NullPointerException();
-        return new Callable<Object>() {
+        return new Callable_<Object>() {
             public Object call() throws Exception { return action.run(); }};
     }
 
     /**
-     * Returns a {@link Callable} object that will, when called,
-     * execute the given {@code callable} under the current access
+     * Returns a {@link Callable_} object that will, when called,
+     * execute the given {@code Callable_} under the current access
      * control context. This method should normally be invoked within
      * an {@link AccessController#doPrivileged AccessController.doPrivileged}
      * action to create callables that will, if possible, execute
      * under the selected permission settings holding within that
      * action; or if not possible, throw an associated {@link
      * AccessControlException}.
-     * @param callable the underlying task
-     * @param <T> the type of the callable's result
-     * @return a callable object
-     * @throws NullPointerException if callable null
+     * @param Callable_ the underlying task
+     * @param <T> the type of the Callable_'s result
+     * @return a Callable_ object
+     * @throws NullPointerException if Callable_ null
      */
-    public static <T> Callable<T> privilegedCallable(Callable<T> callable) {
-        if (callable == null)
+    public static <T> Callable_<T> privilegedCallable(Callable_<T> Callable_) {
+        if (Callable_ == null)
             throw new NullPointerException();
-        return new Executors_.PrivilegedCallable<T>(callable);
+        return new Executors_.PrivilegedCallable<T>(Callable_);
     }
 
     /**
-     * Returns a {@link Callable} object that will, when called,
-     * execute the given {@code callable} under the current access
+     * Returns a {@link Callable_} object that will, when called,
+     * execute the given {@code Callable_} under the current access
      * control context, with the current context class loader as the
      * context class loader. This method should normally be invoked
      * within an
@@ -364,26 +367,26 @@ public class Executors_ {
      * action; or if not possible, throw an associated {@link
      * AccessControlException}.
      *
-     * @param callable the underlying task
-     * @param <T> the type of the callable's result
-     * @return a callable object
-     * @throws NullPointerException if callable null
+     * @param Callable_ the underlying task
+     * @param <T> the type of the Callable_'s result
+     * @return a Callable_ object
+     * @throws NullPointerException if Callable_ null
      * @throws AccessControlException if the current access control
      * context does not have permission to both set and get context
      * class loader
      */
-    public static <T> Callable<T> privilegedCallableUsingCurrentClassLoader(Callable<T> callable) {
-        if (callable == null)
+    public static <T> Callable_<T> privilegedCallableUsingCurrentClassLoader(Callable_<T> Callable_) {
+        if (Callable_ == null)
             throw new NullPointerException();
-        return new Executors_.PrivilegedCallableUsingCurrentClassLoader<T>(callable);
+        return new Executors_.PrivilegedCallableUsingCurrentClassLoader<T>(Callable_);
     }
 
     // Non-public classes supporting the public methods
 
     /**
-     * A callable that runs given task and returns given result
+     * A Callable_ that runs given task and returns given result
      */
-    static final class RunnableAdapter<T> implements Callable<T> {
+    static final class RunnableAdapter<T> implements Callable_<T> {
         final Runnable_ task;
         final T result;
         RunnableAdapter(Runnable_ task, T result) {
@@ -397,13 +400,13 @@ public class Executors_ {
     }
 
     /**
-     * A callable that runs under established access control settings
+     * A Callable_ that runs under established access control settings
      */
-    static final class PrivilegedCallable<T> implements Callable<T> {
-        private final Callable<T> task;
+    static final class PrivilegedCallable<T> implements Callable_<T> {
+        private final Callable_<T> task;
         private final AccessControlContext acc;
 
-        PrivilegedCallable(Callable<T> task) {
+        PrivilegedCallable(Callable_<T> task) {
             this.task = task;
             this.acc = AccessController.getContext();
         }
@@ -423,15 +426,15 @@ public class Executors_ {
     }
 
     /**
-     * A callable that runs under established access control settings and
+     * A Callable_ that runs under established access control settings and
      * current ClassLoader
      */
-    static final class PrivilegedCallableUsingCurrentClassLoader<T> implements Callable<T> {
-        private final Callable<T> task;
+    static final class PrivilegedCallableUsingCurrentClassLoader<T> implements Callable_<T> {
+        private final Callable_<T> task;
         private final AccessControlContext acc;
         private final ClassLoader ccl;
 
-        PrivilegedCallableUsingCurrentClassLoader(Callable<T> task) {
+        PrivilegedCallableUsingCurrentClassLoader(Callable_<T> task) {
             SecurityManager sm = System.getSecurityManager();
             if (sm != null) {
                 // Calls to getContextClassLoader from this class
@@ -559,26 +562,26 @@ public class Executors_ {
         public Future_<?> submit(Runnable_ task) {
             return e.submit(task);
         }
-        public <T> Future_<T> submit(Callable<T> task) {
+        public <T> Future_<T> submit(Callable_<T> task) {
             return e.submit(task);
         }
         public <T> Future_<T> submit(Runnable_ task, T result) {
             return e.submit(task, result);
         }
-        public <T> List<Future_<T>> invokeAll(Collection<? extends Callable<T>> tasks)
+        public <T> List<Future_<T>> invokeAll(Collection<? extends Callable_<T>> tasks)
                 throws InterruptedException {
             return e.invokeAll(tasks);
         }
-        public <T> List<Future_<T>> invokeAll(Collection<? extends Callable<T>> tasks,
+        public <T> List<Future_<T>> invokeAll(Collection<? extends Callable_<T>> tasks,
                                              long timeout, TimeUnit unit)
                 throws InterruptedException {
             return e.invokeAll(tasks, timeout, unit);
         }
-        public <T> T invokeAny(Collection<? extends Callable<T>> tasks)
+        public <T> T invokeAny(Collection<? extends Callable_<T>> tasks)
                 throws InterruptedException, ExecutionException {
             return e.invokeAny(tasks);
         }
-        public <T> T invokeAny(Collection<? extends Callable<T>> tasks,
+        public <T> T invokeAny(Collection<? extends Callable_<T>> tasks,
                                long timeout, TimeUnit unit)
                 throws InterruptedException, ExecutionException, TimeoutException {
             return e.invokeAny(tasks, timeout, unit);
@@ -610,8 +613,8 @@ public class Executors_ {
         public ScheduledFuture_<?> schedule(Runnable_ command, long delay, TimeUnit unit) {
             return e.schedule(command, delay, unit);
         }
-        public <V> ScheduledFuture_<V> schedule(Callable<V> callable, long delay, TimeUnit unit) {
-            return e.schedule(callable, delay, unit);
+        public <V> ScheduledFuture_<V> schedule(Callable_<V> Callable_, long delay, TimeUnit unit) {
+            return e.schedule(Callable_, delay, unit);
         }
         public ScheduledFuture_<?> scheduleAtFixedRate(Runnable_ command, long initialDelay, long period, TimeUnit unit) {
             return e.scheduleAtFixedRate(command, initialDelay, period, unit);

@@ -19,7 +19,7 @@ public class ExecutorCompletionService_<V> implements CompletionService_<V> {
         private final Future_<V> task;
     }
 
-    private RunnableFuture_<V> newTaskFor(Callable<V> task) {
+    private RunnableFuture_<V> newTaskFor(Callable_<V> task) {
         if (aes == null)
             return new FutureTask_<>(task);
         else
@@ -73,7 +73,7 @@ public class ExecutorCompletionService_<V> implements CompletionService_<V> {
         this.completionQueue = completionQueue;
     }
 
-    public Future_<V> submit(Callable<V> task) {
+    public Future_<V> submit(Callable_<V> task) {
         if (task == null) throw new NullPointerException();
         RunnableFuture_<V> f = newTaskFor(task);
         Executor_.execute(new ExecutorCompletionService_.QueueingFuture(f));

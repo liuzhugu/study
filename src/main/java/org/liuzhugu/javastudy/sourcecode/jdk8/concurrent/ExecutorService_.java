@@ -23,7 +23,7 @@ public interface ExecutorService_ extends Executor_ {
             throws InterruptedException;
 
 
-    <T> Future_<T> submit(Callable<T> task);
+    <T> Future_<T> submit(Callable_<T> task);
 
 
     <T> Future_<T> submit(Runnable_ task, T result);
@@ -31,20 +31,20 @@ public interface ExecutorService_ extends Executor_ {
     Future_<?> submit(Runnable_ task);
 
 
-    <T> List<Future_<T>> invokeAll(Collection<? extends Callable<T>> tasks)
+    <T> List<Future_<T>> invokeAll(Collection<? extends Callable_<T>> tasks)
             throws InterruptedException;
 
 
-    <T> List<Future_<T>> invokeAll(Collection<? extends Callable<T>> tasks,
+    <T> List<Future_<T>> invokeAll(Collection<? extends Callable_<T>> tasks,
                                   long timeout, TimeUnit unit)
             throws InterruptedException;
 
 
-    <T> T invokeAny(Collection<? extends Callable<T>> tasks)
+    <T> T invokeAny(Collection<? extends Callable_<T>> tasks)
             throws InterruptedException, ExecutionException;
 
 
-    <T> T invokeAny(Collection<? extends Callable<T>> tasks,
+    <T> T invokeAny(Collection<? extends Callable_<T>> tasks,
                     long timeout, TimeUnit unit)
             throws InterruptedException, ExecutionException, TimeoutException;
 }

@@ -14,8 +14,8 @@ public abstract class AbstractExecutorService_ implements ExecutorService_ {
     }
 
 
-    protected <T> RunnableFuture_<T> newTaskFor(Callable<T> callable) {
-        return new FutureTask_<T>(callable);
+    protected <T> RunnableFuture_<T> newTaskFor(Callable_<T> Callable_) {
+        return new FutureTask_<T>(Callable_);
     }
 
     /**
@@ -44,7 +44,7 @@ public abstract class AbstractExecutorService_ implements ExecutorService_ {
      * @throws RejectedExecutionException {@inheritDoc}
      * @throws NullPointerException       {@inheritDoc}
      */
-    public <T> Future_<T> submit(Callable<T> task) {
+    public <T> Future_<T> submit(Callable_<T> task) {
         if (task == null) throw new NullPointerException();
         RunnableFuture_<T> ftask = newTaskFor(task);
         execute(ftask);
@@ -54,7 +54,7 @@ public abstract class AbstractExecutorService_ implements ExecutorService_ {
     /**
      * the main mechanics of invokeAny.
      */
-    private <T> T doInvokeAny(Collection<? extends Callable<T>> tasks,
+    private <T> T doInvokeAny(Collection<? extends Callable_<T>> tasks,
                               boolean timed, long nanos)
             throws InterruptedException, ExecutionException, TimeoutException {
         if (tasks == null)
@@ -77,7 +77,7 @@ public abstract class AbstractExecutorService_ implements ExecutorService_ {
             // result, we can throw the last exception we got.
             ExecutionException ee = null;
             final long deadline = timed ? System.nanoTime() + nanos : 0L;
-            Iterator<? extends Callable<T>> it = tasks.iterator();
+            Iterator<? extends Callable_<T>> it = tasks.iterator();
 
             // Start one task for sure; the rest incrementally
             futures.add(ecs.submit(it.next()));
@@ -123,7 +123,7 @@ public abstract class AbstractExecutorService_ implements ExecutorService_ {
         }
     }
 
-    public <T> T invokeAny(Collection<? extends Callable<T>> tasks)
+    public <T> T invokeAny(Collection<? extends Callable_<T>> tasks)
             throws InterruptedException, ExecutionException {
         try {
             return doInvokeAny(tasks, false, 0);
@@ -133,20 +133,20 @@ public abstract class AbstractExecutorService_ implements ExecutorService_ {
         }
     }
 
-    public <T> T invokeAny(Collection<? extends Callable<T>> tasks,
+    public <T> T invokeAny(Collection<? extends Callable_<T>> tasks,
                            long timeout, TimeUnit unit)
             throws InterruptedException, ExecutionException, TimeoutException {
         return doInvokeAny(tasks, true, unit.toNanos(timeout));
     }
 
-    public <T> List<Future_<T>> invokeAll(Collection<? extends Callable<T>> tasks)
+    public <T> List<Future_<T>> invokeAll(Collection<? extends Callable_<T>> tasks)
             throws InterruptedException {
         if (tasks == null)
             throw new NullPointerException();
         ArrayList<Future_<T>> futures = new ArrayList<Future_<T>>(tasks.size());
         boolean done = false;
         try {
-            for (Callable<T> t : tasks) {
+            for (Callable_<T> t : tasks) {
                 RunnableFuture_<T> f = newTaskFor(t);
                 futures.add(f);
                 execute(f);
@@ -170,7 +170,7 @@ public abstract class AbstractExecutorService_ implements ExecutorService_ {
         }
     }
 
-    public <T> List<Future_<T>> invokeAll(Collection<? extends Callable<T>> tasks,
+    public <T> List<Future_<T>> invokeAll(Collection<? extends Callable_<T>> tasks,
                                          long timeout, TimeUnit unit)
             throws InterruptedException {
         if (tasks == null)
@@ -179,7 +179,7 @@ public abstract class AbstractExecutorService_ implements ExecutorService_ {
         ArrayList<Future_<T>> futures = new ArrayList<Future_<T>>(tasks.size());
         boolean done = false;
         try {
-            for (Callable<T> t : tasks)
+            for (Callable_<T> t : tasks)
                 futures.add(newTaskFor(t));
 
             final long deadline = System.nanoTime() + nanos;

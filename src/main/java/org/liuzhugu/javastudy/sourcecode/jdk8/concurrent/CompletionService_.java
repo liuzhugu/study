@@ -1,6 +1,5 @@
 package org.liuzhugu.javastudy.sourcecode.jdk8.concurrent;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +15,7 @@ public interface CompletionService_<V> {
      *         scheduled for execution
      * @throws NullPointerException if the task is null
      */
-    Future_<V> submit(Callable<V> task);
+    Future_<V> submit(Callable_<V> task);
 
     /**
      * Submits a Runnable_ task for execution and returns a Future_

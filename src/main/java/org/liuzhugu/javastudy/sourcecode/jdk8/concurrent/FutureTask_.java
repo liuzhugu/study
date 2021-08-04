@@ -14,11 +14,11 @@ public class FutureTask_<V> implements RunnableFuture_<V> {
     private static final int INTERRUPTING = 5;
     private static final int INTERRUPTED  = 6;
 
-    /** The underlying callable; nulled out after running */
-    private Callable<V> callable;
+    /** The underlying Callable_; nulled out after running */
+    private Callable_<V> Callable_;
     /** The result to return or exception to throw from get() */
     private Object outcome; // non-volatile, protected by state reads/writes
-    /** The thread running the callable; CASed during run() */
+    /** The thread running the Callable_; CASed during run() */
     private volatile Thread runner;
     /** Treiber stack of waiting threads */
     private volatile FutureTask_.WaitNode waiters;
@@ -30,7 +30,7 @@ public class FutureTask_<V> implements RunnableFuture_<V> {
                         null, Thread.currentThread()))
             return;
         try {
-            Callable<V> c = callable;
+            Callable_<V> c = Callable_;
             if (c != null && state == NEW) {
                 V result;
                 boolean ran;
@@ -111,16 +111,16 @@ public class FutureTask_<V> implements RunnableFuture_<V> {
 
     /**
      * Creates a {@code FutureTask_} that will, upon running, execute the
-     * given {@code Callable}.
+     * given {@code Callable_}.
      *
-     * @param  callable the callable task
-     * @throws NullPointerException if the callable is null
+     * @param  Callable_ the Callable_ task
+     * @throws NullPointerException if the Callable_ is null
      */
-    public FutureTask_(Callable<V> callable) {
-        if (callable == null)
+    public FutureTask_(Callable_<V> Callable_) {
+        if (Callable_ == null)
             throw new NullPointerException();
-        this.callable = callable;
-        this.state = NEW;       // ensure visibility of callable
+        this.Callable_ = Callable_;
+        this.state = NEW;       // ensure visibility of Callable_
     }
 
     /**
@@ -136,8 +136,8 @@ public class FutureTask_<V> implements RunnableFuture_<V> {
      * @throws NullPointerException if the Runnable_ is null
      */
     public FutureTask_(Runnable_ Runnable_, V result) {
-        this.callable = Executors_.callable(Runnable_, result);
-        this.state = NEW;       // ensure visibility of callable
+        this.Callable_ = Executors_.Callable_(Runnable_, result);
+        this.state = NEW;       // ensure visibility of Callable_
     }
 
     public boolean isCancelled() {
@@ -230,7 +230,7 @@ public class FutureTask_<V> implements RunnableFuture_<V> {
         boolean ran = false;
         int s = state;
         try {
-            Callable<V> c = callable;
+            Callable_<V> c = Callable_;
             if (c != null && s == NEW) {
                 try {
                     c.call(); // don't set result
@@ -287,7 +287,7 @@ public class FutureTask_<V> implements RunnableFuture_<V> {
 
     /**
      * Removes and signals all waiting threads, invokes done(), and
-     * nulls out callable.
+     * nulls out Callable_.
      */
     private void finishCompletion() {
         // assert state > COMPLETING;
@@ -311,7 +311,7 @@ public class FutureTask_<V> implements RunnableFuture_<V> {
 
         done();
 
-        callable = null;        // to reduce footprint
+        Callable_ = null;        // to reduce footprint
     }
 
     /**

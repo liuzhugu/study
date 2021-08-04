@@ -88,8 +88,8 @@ public class ScheduledThreadPoolExecutor_
         /**
          * Creates a one-shot action with given nanoTime-based trigger time.
          */
-        ScheduledFutureTask(Callable<V> callable, long ns) {
-            super(callable);
+        ScheduledFutureTask(Callable_<V> Callable_, long ns) {
+            super(Callable_);
             this.time = ns;
             this.period = 0;
             this.sequenceNumber = sequencer.getAndIncrement();
@@ -266,19 +266,19 @@ public class ScheduledThreadPoolExecutor_
     }
 
     /**
-     * Modifies or replaces the task used to execute a callable.
+     * Modifies or replaces the task used to execute a Callable_.
      * This method can be used to override the concrete
      * class used for managing internal tasks.
      * The default implementation simply returns the given task.
      *
-     * @param callable the submitted Callable
-     * @param task the task created to execute the callable
+     * @param Callable_ the submitted Callable_
+     * @param task the task created to execute the Callable_
      * @param <V> the type of the task's result
-     * @return a task that can execute the callable
+     * @return a task that can execute the Callable_
      * @since 1.6
      */
     protected <V> RunnableScheduledFuture_<V> decorateTask(
-            Callable<V> callable, RunnableScheduledFuture_<V> task) {
+            Callable_<V> Callable_, RunnableScheduledFuture_<V> task) {
         return task;
     }
 
@@ -402,13 +402,13 @@ public class ScheduledThreadPoolExecutor_
      * @throws RejectedExecutionException {@inheritDoc}
      * @throws NullPointerException       {@inheritDoc}
      */
-    public <V> ScheduledFuture_<V> schedule(Callable<V> callable,
+    public <V> ScheduledFuture_<V> schedule(Callable_<V> Callable_,
                                            long delay,
                                            TimeUnit unit) {
-        if (callable == null || unit == null)
+        if (Callable_ == null || unit == null)
             throw new NullPointerException();
-        RunnableScheduledFuture_<V> t = decorateTask(callable,
-                new ScheduledThreadPoolExecutor_.ScheduledFutureTask<V>(callable,
+        RunnableScheduledFuture_<V> t = decorateTask(Callable_,
+                new ScheduledThreadPoolExecutor_.ScheduledFutureTask<V>(Callable_,
                         triggerTime(delay, unit)));
         delayedExecute(t);
         return t;
@@ -482,14 +482,14 @@ public class ScheduledThreadPoolExecutor_
      * @throws NullPointerException       {@inheritDoc}
      */
     public <T> Future_<T> submit(Runnable_ task, T result) {
-        return schedule(Executors_.callable(task, result), 0, NANOSECONDS);
+        return schedule(Executors_.Callable_(task, result), 0, NANOSECONDS);
     }
 
     /**
      * @throws RejectedExecutionException {@inheritDoc}
      * @throws NullPointerException       {@inheritDoc}
      */
-    public <T> Future_<T> submit(Callable<T> task) {
+    public <T> Future_<T> submit(Callable_<T> task) {
         return schedule(task, 0, NANOSECONDS);
     }
 

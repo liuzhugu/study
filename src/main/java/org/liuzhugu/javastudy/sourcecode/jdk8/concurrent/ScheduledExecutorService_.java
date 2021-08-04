@@ -25,16 +25,16 @@ public interface ScheduledExecutorService_ extends ExecutorService_ {
      * Creates and executes a ScheduledFuture_ that becomes enabled after the
      * given delay.
      *
-     * @param callable the function to execute
+     * @param Callable_ the function to execute
      * @param delay the time from now to delay execution
      * @param unit the time unit of the delay parameter
-     * @param <V> the type of the callable's result
+     * @param <V> the type of the Callable_'s result
      * @return a ScheduledFuture_ that can be used to extract result or cancel
      * @throws RejectedExecutionException if the task cannot be
      *         scheduled for execution
-     * @throws NullPointerException if callable is null
+     * @throws NullPointerException if Callable_ is null
      */
-    public <V> ScheduledFuture_<V> schedule(Callable<V> callable,
+    public <V> ScheduledFuture_<V> schedule(Callable_<V> Callable_,
                                            long delay, TimeUnit unit);
 
     /**
