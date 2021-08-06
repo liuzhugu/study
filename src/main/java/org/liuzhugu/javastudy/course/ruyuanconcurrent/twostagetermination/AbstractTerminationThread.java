@@ -1,7 +1,5 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination;
 
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * 终端线程的抽象类
