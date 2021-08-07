@@ -33,14 +33,19 @@ public class WorkerThreadPipeDecorator<IN,OUT> implements Pipe<IN,OUT> {
         this.workQueue = workQueue;
 
         this.delegate = delegate;
+        //创建指定数量的线程
         for (int i = 0;i < workCount;i ++) {
+            //将创建的线程加入线程队列
             workThreads.add(new AbstractTerminationThread() {
+                //除非设置了线程终止标志  否则会线程死循环执行该方法
+                //不断从任务队列获取任务  执行任务
                 @Override
                 protected void doRun() throws Exception {
                     try {
                         //工作线程通过两阶段终止来实现  回调执行doRun方法
                         dispatch();
                     } finally {
+                        //执行完任务  未执行完的任务数 线程安全地减1
                         terminationToken.reservations.decrementAndGet();
                     }
                 }
@@ -54,6 +59,7 @@ public class WorkerThreadPipeDecorator<IN,OUT> implements Pipe<IN,OUT> {
      * @throws InterruptedException
      * */
     protected void dispatch() throws InterruptedException {
+        //队列为空  获取不到任务时  阻塞在队列上
         IN input = workQueue.take();
         delegate.process(input);
     }
@@ -75,6 +81,7 @@ public class WorkerThreadPipeDecorator<IN,OUT> implements Pipe<IN,OUT> {
     @Override
     public void shutdown(long timeout, TimeUnit unit) {
         for (AbstractTerminationThread thread : workThreads) {
+            //通知所有线程终止
             thread.terminate();
             try {
                 thread.join(TimeUnit.MILLISECONDS.convert(timeout,unit));

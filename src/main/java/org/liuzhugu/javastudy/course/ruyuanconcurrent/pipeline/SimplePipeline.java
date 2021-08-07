@@ -14,10 +14,19 @@ public class SimplePipeline<T,OUT> extends AbstractPipe<T,OUT> implements Pipeli
      * */
     private final Queue<Pipe<?,?>> pipes = new LinkedList<>();
 
+    /**
+     * 线程池
+     * */
     private final ExecutorService helperExecutor;
 
+    /**
+     * 默认
+     * */
     public SimplePipeline() {
-        this(Executors.newSingleThreadExecutor(new ThreadFactory() {
+        //单线程线程池
+        this(Executors.newSingleThreadExecutor(
+                //线程工厂
+                new ThreadFactory() {
             @Override
             public Thread newThread(Runnable r) {
                 Thread t = new Thread(r,"SimplePipeline-Helper");
@@ -34,12 +43,18 @@ public class SimplePipeline<T,OUT> extends AbstractPipe<T,OUT> implements Pipeli
 
     @Override
     public void addPipe(Pipe<?, ?> pipe) {
+        //往pipes里添加一个pipe实例
         pipes.add(pipe);
     }
 
-    @Override
-    public void setNextPipe(Pipe nextPipe) {
+    public  <IN,OUT> void addAsWorkerThreadBasePipe(Pipe<IN,OUT> delegate,int workCount) {
+        //将pipe封装成一个WorkerThreadPipeDecorator,往pipeline中添加一个pipe实例
+        addPipe(new WorkerThreadPipeDecorator<>(delegate,workCount));
+    }
 
+    public  <IN,OUT> void addAsThreadPoolBasePipe(Pipe<IN,OUT> delegate,ExecutorService executorService) {
+        //将pipe封装成一个WorkerThreadPipeDecorator,往pipeline中添加一个pipe实例
+        addPipe(new ThreadPoolPipeDecorator<>(delegate,executorService));
     }
 
     @SuppressWarnings({"rawtypes","unchecked"})

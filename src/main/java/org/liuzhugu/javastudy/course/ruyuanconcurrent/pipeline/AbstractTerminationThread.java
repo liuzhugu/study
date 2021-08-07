@@ -1,5 +1,8 @@
-package org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination;
+package org.liuzhugu.javastudy.course.ruyuanconcurrent.pipeline;
 
+
+import org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination.Termination;
+import org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination.TerminationToken;
 
 /**
  * 终端线程的抽象类
@@ -29,18 +32,16 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
     public void run() {
         Exception ex = null;
         try {
+            //死循环  不断执行任务
             for (;;) {
                 //死循环  先判断中断实例的标识是否为true 并且有没有未完成的任务
-                System.out.println("告警线程执行，此时中断标志位: " + terminationToken.isToShutdowm()
-                        + ",未完成的任务数量:" + terminationToken.reservations.get());
                 if (terminationToken.isToShutdowm() && terminationToken.reservations.get() <= 0) {
                     //线程已经终止   中断线程退出
                     System.out.println("中断标志位true，未完成任务为0，告警线程退出");
                     break;
                 }
 
-                //除非检测到线程要退出
-                // 否则死循环执行具体的业务逻辑
+                //执行具体的业务逻辑
                 doRun();
             }
         } catch (Exception e) {
@@ -50,13 +51,16 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
                 //中断线程相应退出
                 System.out.println("中断响应:" + e);
             }
-        } finally {
+        }
+        //当上面循环跳出后  也就是线程终止了  此时执行线程停止的一些清理工作
+        finally {
             try {
-                System.out.println("告警线程停止，回调终止后的清理工作");
-                doClean(ex);
+                System.out.println("线程停止，回调终止后的清理工作");
+                doCleanup(ex);
             } finally {
                 //通知terminationToken管理的所有线程实例进行退出
                 System.out.println("标志实例对象中一个线程终止，通知其他线程终止");
+                //标记类注册了所有工作者线程  当一个线程终止后   它可以通知其他线程进行终止
                 terminationToken.notifyThreadTermination(this);
             }
         }
@@ -88,17 +92,11 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
      *
      * @param ex
      */
-    protected void doClean(Exception ex) {
-
-    }
-
-
+    protected  void doCleanup(Exception ex) {}
 
 
     /**
      * 执行终止线程的逻辑 留个子类去具体的实现
      */
-    protected void doTerminate() {
-
-    }
+    protected void doTerminate() {}
 }
