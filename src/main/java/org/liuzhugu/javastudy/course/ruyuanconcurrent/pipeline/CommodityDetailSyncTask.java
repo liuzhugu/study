@@ -2,17 +2,29 @@ package org.liuzhugu.javastudy.course.ruyuanconcurrent.pipeline;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
  *  案例场景:电商平台定时生成静态化页面  定时同步到指定的nginx服务器上去
  * */
-public class CommodityDetailTask implements Runnable {
+public class CommodityDetailSyncTask implements Runnable {
     @Override
     public void run() {
         // 创建Pipe实例
-        SimplePipeline<CommodityDetailTask,String> pipeline =
+        SimplePipeline<CommodityInfoTask,String> pipeline = buildPipeLine();
+        //初始化
+        pipeline.init(pipeline.newDefaultPipelineContext());
+        //接口CommodityDbData
+        try {
+            //创建商品查询数据源
+            CommodityDbData commodityDbDataList = new CommodityDbData();
+            //使用pipeline来处理商品信息
+            processCommodityInfos(commodityDbDataList,pipeline);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        pipeline.shutdown(360,TimeUnit.SECONDS);
     }
 
     /**
@@ -32,12 +44,19 @@ public class CommodityDetailTask implements Runnable {
          * Pipe都才用单线程  若各个pipe要改用线程池来处理  需要注意 1.线程安全  2.死锁
          * */
         final ExecutorService helperExecutor = Executors.newSingleThreadExecutor();
-        final SimplePipeline<CommodityDetailTask,String> pipeline = new SimplePipeline<>(helperExecutor);
+        final SimplePipeline<CommodityInfoTask,String> pipeline = new SimplePipeline<>(helperExecutor);
 
         /**
          * 根据数据库记录生成相应的静态页面写入到文件中AbstractPipe
          * */
-        Pipe<CommodityDetailTask,String> commodityInfoStage =
+        Pipe<CommodityInfoTask,File> commodityInfoStage = generateCommodityInfoStage();
+        pipeline.addAsWorkerThreadBasePipe(commodityInfoStage,1);
+
+        //将生成的静态化页面传输到nginx上  并行的pipe:AbstractParallelPipe
+        Pipe<File,File> stageTransferFile = createFileTransferStage();
+        pipeline.addAsWorkerThreadBasePipe(stageTransferFile,1);
+
+        return pipeline;
     }
 
     private Pipe<CommodityInfoTask, File> generateCommodityInfoStage() {
@@ -81,7 +100,7 @@ public class CommodityDetailTask implements Runnable {
         //AbstractParallelPipe类
         ret = new AbstractParallelPipe<File,File, File>(new SynchronousQueue<>(),ftpExecutorService) {
             @SuppressWarnings("unchecked")
-            final Future<FtpUpload>[] ftpClientUtilHolders = new Future[ftpServerConfigs.length];
+            final Future<FtpUploader>[] ftpClientUtilHolders = new Future[ftpServerConfigs.length];
 
             @Override
             public void init(PipeContext pipeCtx) {
@@ -98,11 +117,19 @@ public class CommodityDetailTask implements Runnable {
             @Override
             public void shutdown(long timeout, TimeUnit unit) {
                 super.shutdown(timeout, unit);
-            }
-
-            @Override
-            protected List<Future<File>> invokeParallel(List<Callable<File>> tasks) throws Exception {
-                return super.invokeParallel(tasks);
+                ftpExecutorService.shutdown();
+                try {
+                    ftpExecutorService.awaitTermination(timeout,unit);
+                } catch (InterruptedException e) {
+                    ;
+                }
+                for (Future<FtpUploader> ftpClientUtilHolder : ftpClientUtilHolders) {
+                    try {
+                        ftpClientUtilHolder.get().disconnect();
+                    } catch (Exception E) {
+                        ;
+                    }
+                }
             }
 
             @Override
@@ -111,15 +138,35 @@ public class CommodityDetailTask implements Runnable {
             }
 
             @Override
-            protected List<Callable<File>> buildTasks(File input) throws Exception {
-                return null;
+            protected List<Callable<File>> buildTasks(final File file) throws Exception {
+                //创建一组并发任务  将指定的文件上传到多个FTP服务器上
+                List<Callable<File>> tasks = new LinkedList<>();
+                for (Future<FtpUploader> ftpClientUtilHolder : ftpClientUtilHolders) {
+                    tasks.add(new FileTransferTask(ftpClientUtilHolder,file));
+                }
+                return tasks;
             }
 
             @Override
             protected File combineResults(List<Future<File>> subTaskResults) throws Exception {
-                return null;
+                if (0 == subTaskResults.size()) {
+                    return null;
+                }
+                //组合执行的结果  这里因为ftp的client只有一个同步阻塞等待其中一个执行完毕即可
+                //然后返回对应的文件数据
+                return subTaskResults.get(0).get();
             }
         };
         return ret;
+    }
+
+    private void processCommodityInfos(CommodityDbData commodityDbData,
+                                       Pipeline<CommodityInfoTask,String> pipeline) throws Exception {
+        CommodityInfo commodityInfo;
+        while (commodityDbData.hasNext()) {
+            commodityInfo = commodityDbData.next();
+            //通过pipeline来处理每一个商品任务
+            pipeline.process(new CommodityInfoTask(commodityInfo,commodityInfo.getId() + ".html"));
+        }
     }
 }
