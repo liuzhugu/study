@@ -4,6 +4,8 @@ package org.liuzhugu.javastudy.course.ruyuanconcurrent.pipeline;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination.Termination;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination.TerminationToken;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * 终端线程的抽象类
  * */
@@ -11,13 +13,18 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
 
     public final TerminationToken terminationToken;
 
-    public AbstractTerminationThread() {
-        this(new TerminationToken());
+    private String threadName;
+
+    public static AtomicInteger threadCount = new AtomicInteger(0);
+
+    public AbstractTerminationThread(String threadName) {
+        this(threadName,new TerminationToken());
     }
 
-    public AbstractTerminationThread(TerminationToken terminationToken) {
+    public AbstractTerminationThread(String threadName,TerminationToken terminationToken) {
         this.terminationToken = terminationToken;
-        System.out.println("注册警告线程到线程停止的标志实现对象队列中");
+        this.threadName = threadName;
+        System.out.println("注册线程到线程停止的标志实现对象队列中");
         terminationToken.register(this);
     }
 
@@ -37,7 +44,7 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
                 //死循环  先判断中断实例的标识是否为true 并且有没有未完成的任务
                 if (terminationToken.isToShutdowm() && terminationToken.reservations.get() <= 0) {
                     //线程已经终止   中断线程退出
-                    System.out.println("中断标志位true，未完成任务为0，告警线程退出");
+                    System.out.println("中断标志位true，未完成任务为0，线程 " + threadName + " 退出");
                     break;
                 }
 

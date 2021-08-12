@@ -7,6 +7,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 public class FileTransferTask implements Callable<File> {
+    /**
+     * 凭据对象  可以获取到连接Nginx的客户端
+     * */
     public final Future<FtpUploader> ftpUtilHolder;
     public final File file2Transfer;
 

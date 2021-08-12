@@ -9,21 +9,28 @@ import java.util.concurrent.*;
  *  案例场景:电商平台定时生成静态化页面  定时同步到指定的nginx服务器上去
  * */
 public class CommodityDetailSyncTask implements Runnable {
+
+    /**
+     * 灵活扩展的地方有两个
+     * 1.要处理的任务
+     * 2.处理任务的Pipe
+     * */
     @Override
     public void run() {
-        // 创建Pipe实例
+        // 1 创建Pipeline实例  设置生成和上传两个阶段
         SimplePipeline<CommodityInfoTask,String> pipeline = buildPipeLine();
-        //初始化
+        // 2 初始化Pipeline实例   串联pipe  将pipe的初始化交由线程池执行
         pipeline.init(pipeline.newDefaultPipelineContext());
-        //接口CommodityDbData
+        // 3 设置Pipeline要处理的任务
         try {
-            //创建商品查询数据源
+            //3.1 创建商品查询数据源
             CommodityDbData commodityDbDataList = new CommodityDbData();
-            //使用pipeline来处理商品信息
+            //3.2 使用pipeline来处理商品信息
             processCommodityInfos(commodityDbDataList,pipeline);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        // 4 处理完毕  终止Pipeline
         pipeline.shutdown(360,TimeUnit.SECONDS);
     }
 
@@ -47,14 +54,20 @@ public class CommodityDetailSyncTask implements Runnable {
         final SimplePipeline<CommodityInfoTask,String> pipeline = new SimplePipeline<>(helperExecutor);
 
         /**
+         * 第一阶段
+         *
          * 根据数据库记录生成相应的静态页面写入到文件中AbstractPipe
          * */
         Pipe<CommodityInfoTask,File> commodityInfoStage = generateCommodityInfoStage();
         pipeline.addAsWorkerThreadBasePipe(commodityInfoStage,1);
 
-        //将生成的静态化页面传输到nginx上  并行的pipe:AbstractParallelPipe
-        Pipe<File,File> stageTransferFile = createFileTransferStage();
-        pipeline.addAsWorkerThreadBasePipe(stageTransferFile,1);
+        /**
+         * 第二阶段
+         *
+         * 将生成的静态化页面传输到nginx上  并行的pipe:AbstractParallelPipe
+         */
+        Pipe<File,File> transferFileStage = createFileTransferStage();
+        pipeline.addAsWorkerThreadBasePipe(transferFileStage,1);
 
         return pipeline;
     }
@@ -89,6 +102,7 @@ public class CommodityDetailSyncTask implements Runnable {
         Pipe<File,File> ret;
         final String[][] ftpServerConfigs = {{"127.0.0.1"}};
 
+        //
         final ThreadPoolExecutor ftpExecutorService = new ThreadPoolExecutor(
                 1,
                 ftpServerConfigs.length,
@@ -99,6 +113,9 @@ public class CommodityDetailSyncTask implements Runnable {
 
         //AbstractParallelPipe类
         ret = new AbstractParallelPipe<File,File, File>(new SynchronousQueue<>(),ftpExecutorService) {
+            /**
+             * 连接nginx客户端的凭据对象 根据上传的服务器数量来创建
+             * */
             @SuppressWarnings("unchecked")
             final Future<FtpUploader>[] ftpClientUtilHolders = new Future[ftpServerConfigs.length];
 
@@ -125,6 +142,7 @@ public class CommodityDetailSyncTask implements Runnable {
                 }
                 for (Future<FtpUploader> ftpClientUtilHolder : ftpClientUtilHolders) {
                     try {
+                        //断开连接
                         ftpClientUtilHolder.get().disconnect();
                     } catch (Exception E) {
                         ;
@@ -137,6 +155,9 @@ public class CommodityDetailSyncTask implements Runnable {
                 return super.doProcess(input);
             }
 
+            /**
+             * 任务分片
+             * */
             @Override
             protected List<Callable<File>> buildTasks(final File file) throws Exception {
                 //创建一组并发任务  将指定的文件上传到多个FTP服务器上
@@ -147,12 +168,15 @@ public class CommodityDetailSyncTask implements Runnable {
                 return tasks;
             }
 
+            /**
+             * 合并结果
+             * */
             @Override
             protected File combineResults(List<Future<File>> subTaskResults) throws Exception {
                 if (0 == subTaskResults.size()) {
                     return null;
                 }
-                //组合执行的结果  这里因为ftp的client只有一个同步阻塞等待其中一个执行完毕即可
+                //组合执行的结果  这里因为ftp的client只有一个 同步阻塞等待其中一个执行完毕即可
                 //然后返回对应的文件数据
                 return subTaskResults.get(0).get();
             }

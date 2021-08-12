@@ -15,7 +15,7 @@ public class SimplePipeline<T,OUT> extends AbstractPipe<T,OUT> implements Pipeli
     private final Queue<Pipe<?,?>> pipes = new LinkedList<>();
 
     /**
-     * 线程池
+     * 线程池  只负责执行Pipe的初始化而已
      * */
     private final ExecutorService helperExecutor;
 
@@ -115,6 +115,7 @@ public class SimplePipeline<T,OUT> extends AbstractPipe<T,OUT> implements Pipeli
     public void shutdown(long timeout, TimeUnit unit) {
         Pipe<?,?> pipe;
         while (null != (pipe = pipes.poll())) {
+            //如果任务还没处理完  会阻塞
             pipe.shutdown(timeout,unit);
         }
         helperExecutor.shutdown();
@@ -124,7 +125,7 @@ public class SimplePipeline<T,OUT> extends AbstractPipe<T,OUT> implements Pipeli
     public void process(T input) throws InterruptedException {
         @SuppressWarnings("unchecked")
         Pipe<T, ?> firstPipe = (Pipe<T, ?>) pipes.peek();
-
+        //因为已经串联好Pipe链 因此交由第一个Pipe开始处理  其处理完会自动传给下一个
         firstPipe.process(input);
     }
 

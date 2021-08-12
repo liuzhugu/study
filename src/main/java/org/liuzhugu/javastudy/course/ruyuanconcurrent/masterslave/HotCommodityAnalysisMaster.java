@@ -66,7 +66,7 @@ public class HotCommodityAnalysisMaster {
         Worker worker;
 
         for(int i = 0;i < WORK_COUNT;i ++) {
-            worker = new Worker(hotCommodityMap);
+            worker = new Worker("workerThread-" + i,hotCommodityMap);
             workers[i] = worker;
             worker.start();
         }

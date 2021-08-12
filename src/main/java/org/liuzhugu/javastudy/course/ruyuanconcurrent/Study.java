@@ -5,6 +5,8 @@ import org.liuzhugu.javastudy.course.ruyuanconcurrent.immutable.SmsRouter;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.longaddresstranslationwork.ArticleAccessTest;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.masterslave.HotCommodityAnalysisMaster;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.masterslave.HotCommodityTest;
+import org.liuzhugu.javastudy.course.ruyuanconcurrent.pipeline.CommodityDetailSyncTask;
+import org.liuzhugu.javastudy.course.ruyuanconcurrent.pipeline.CommodityDetailSyncTaskTest;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.productandconsumer.HouseContractAttachmentProcessor;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.productandconsumer.ProduceConsumer;
 import org.liuzhugu.javastudy.course.ruyuanconcurrent.promise.CloudClient;
@@ -51,6 +53,8 @@ public class Study {
         UserPasswordSystemManager userPasswordSystemManager = UserPasswordSystemManager.getInstance();
         //8.主从模式
         HotCommodityAnalysisMaster master = new HotCommodityAnalysisMaster("");
+        //9.Pipeline
+        CommodityDetailSyncTaskTest commodityDetailSyncTask = new CommodityDetailSyncTaskTest();
 
         //1.智慧制造监控系统
         AlarmManagerTest alarmManagerTest = new AlarmManagerTest();
@@ -60,6 +64,7 @@ public class Study {
         ArticleAccessTest articleAccessTest = new ArticleAccessTest();
         //4.电商平台热点商品分析系统
         HotCommodityTest hotCommodityTest = new HotCommodityTest();
-        //5.
+        //5.在电商平台页面静态化系统中实现上传静态化页面到Nginx
+        CommodityDetailSyncTaskTest commodityDetailSyncTaskTest = new CommodityDetailSyncTaskTest();
     }
 }

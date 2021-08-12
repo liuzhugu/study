@@ -1,8 +1,8 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.pipeline;
 
-public class CommodityDetailTaskTest {
+public class CommodityDetailSyncTaskTest {
     public static void main(String[] args) {
-        CommodityDetailTask task = new CommodityDetailTask();
+        CommodityDetailSyncTask task = new CommodityDetailSyncTask();
         task.run();
     }
 }

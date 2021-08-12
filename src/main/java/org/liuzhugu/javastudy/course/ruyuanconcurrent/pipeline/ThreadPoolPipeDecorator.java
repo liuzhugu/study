@@ -64,6 +64,10 @@ public class ThreadPoolPipeDecorator<IN,OUT> implements Pipe<IN,OUT> {
                 } finally {
                     remainingReservations = customTerminationToken.reservations.decrementAndGet();
                 }
+
+                if (customTerminationToken.isToShutdowm() && 0 == remainingReservations) {
+                    stageProcessDoneLatch.countDown();
+                }
             }
         };
 

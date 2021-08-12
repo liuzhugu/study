@@ -1,6 +1,5 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.pipeline;
 
-import org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination.AbstractTerminationThread;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,7 +35,8 @@ public class WorkerThreadPipeDecorator<IN,OUT> implements Pipe<IN,OUT> {
         //创建指定数量的线程
         for (int i = 0;i < workCount;i ++) {
             //将创建的线程加入线程队列
-            workThreads.add(new AbstractTerminationThread() {
+            workThreads.add(new AbstractTerminationThread("workerThread-" +
+                    AbstractTerminationThread.threadCount.incrementAndGet()) {
                 //除非设置了线程终止标志  否则会线程死循环执行该方法
                 //不断从任务队列获取任务  执行任务
                 @Override
@@ -72,7 +72,7 @@ public class WorkerThreadPipeDecorator<IN,OUT> implements Pipe<IN,OUT> {
     @Override
     public void init(PipeContext pipeCtx) {
         delegate.init(pipeCtx);
-        //启动工作线程
+        //启动所有工作线程
         for (AbstractTerminationThread thread : workThreads) {
             thread.start();
         }
@@ -95,6 +95,8 @@ public class WorkerThreadPipeDecorator<IN,OUT> implements Pipe<IN,OUT> {
     @Override
     public void process(IN input) throws InterruptedException {
         //输入放到work的队列中去
+        //  如果之前队列为空 那么激活等待在队列上的线程
+        //  否则线程不断从队列中获取任务  最终执行到该任务
         workQueue.put(input);
         terminationToken.reservations.incrementAndGet();
     }
