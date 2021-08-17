@@ -9,6 +9,7 @@ public class AIMain {
         String str;
         while(scanner.hasNext()){
             str = scanner.next();
+            str = str.replace("你","我");
             str = str.replace("吗","");
             str = str.replace("?","!");
             str = str.replace("？","!");
