@@ -7,4 +7,9 @@
         <property name="id" value="1"/>
         <property name="name" value="小明"/>
     </bean>
+
+    <bean id="testUtil" class="org.liuzhugu.javastudy.framestudy.spring.ioc.TestUtil"
+          autowire="byType"/>
+    <!--          autowire="byName"/>-->
+
 </beans>

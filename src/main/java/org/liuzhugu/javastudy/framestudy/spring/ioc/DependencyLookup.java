@@ -1,8 +1,8 @@
 package org.liuzhugu.javastudy.framestudy.spring.ioc;
 
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.ListableBeanFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.liuzhugu.javastudy.sourcecode.spring.BeanFactory;
+import org.liuzhugu.javastudy.sourcecode.spring.ClassPathXmlApplicationContext;
+import org.liuzhugu.javastudy.sourcecode.spring.ListableBeanFactory;
 
 import java.util.Map;
 
@@ -11,14 +11,23 @@ import java.util.Map;
  * */
 public class DependencyLookup {
     public static void main(String[] args) {
-        BeanFactory beanFactory = new ClassPathXmlApplicationContext("classpath:/spring/META-INF/dependency-lookup.xml");
+        BeanFactory beanFactory = new ClassPathXmlApplicationContext(
+                "classpath:/spring/META-INF/dependency-lookup.xml");
+
+        //bean加载与查找
         //根据bean名查找
-        lookupRealtime(beanFactory);
+        //lookupRealtime(beanFactory);
         //根据类型查找  同一类型可能有多个bean
         //   获取一个
-        lookupSingleByType(beanFactory);
+        //lookupSingleByType(beanFactory);
         //   获取所有
-        lookupCollectionByType(beanFactory);
+        //lookupCollectionByType(beanFactory);
+
+        //依赖注入   可以通过名称或者类型找到依赖的bean 然后注入需要的地方
+        TestUtil testUtil = (TestUtil) beanFactory.getBean("testUtil");
+        User user = testUtil.getUser();
+        System.out.println(user);
+
     }
 
     private static void lookupRealtime(BeanFactory beanFactory) {
