@@ -1,7 +1,6 @@
 package org.liuzhugu.javastudy.sourcecode.spring;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 
 import java.beans.PropertyDescriptor;
 

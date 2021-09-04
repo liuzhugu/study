@@ -58,8 +58,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
         return this.doGetBean(name, requiredType, args, false);
     }
 
+    //获取bean
     protected <T> T doGetBean(String name, Class<T> requiredType, final Object[] args, boolean typeCheckOnly) throws BeansException {
         final String beanName = this.transformedBeanName(name);
+        //从单例map中获取
         Object sharedInstance = this.getSingleton(beanName);
         Object bean;
         if (sharedInstance != null && args == null) {
@@ -117,6 +119,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
                 }
 
                 if (mbd.isSingleton()) {
+                    //获取单例
                     sharedInstance = this.getSingleton(beanName, new ObjectFactory<Object>() {
                         public Object getObject() throws BeansException {
                             try {

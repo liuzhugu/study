@@ -143,6 +143,7 @@ class PostProcessorRegistrationDelegate {
         beanFactory.clearMetadataCache();
     }
 
+
     public static void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory, AbstractApplicationContext applicationContext) {
         String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class, true, false);
         int beanProcessorTargetCount = beanFactory.getBeanPostProcessorCount() + 1 + postProcessorNames.length;
@@ -199,6 +200,7 @@ class PostProcessorRegistrationDelegate {
             }
         }
 
+        //注册后继处理器
         registerBeanPostProcessors(beanFactory, (List)nonOrderedPostProcessors);
         sortPostProcessors(internalPostProcessors, beanFactory);
         registerBeanPostProcessors(beanFactory, (List)internalPostProcessors);

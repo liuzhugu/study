@@ -511,6 +511,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
                     } while(!bd.isSingleton());
                 } while(bd.isLazyInit());
 
+                //获取单例
                 if (this.isFactoryBean(beanName)) {
                     final FactoryBean<?> factory = (FactoryBean)this.getBean("&" + beanName);
                     boolean isEagerInit;

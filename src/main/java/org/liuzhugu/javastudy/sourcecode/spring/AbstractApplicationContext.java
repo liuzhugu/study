@@ -453,12 +453,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
         for(int var5 = 0; var5 < var4; ++var5) {
             String weaverAwareName = var3[var5];
-            //获取bean
+            //$ 获取bean  最终调取到bean工程的doGetBean
             this.getBean(weaverAwareName);
         }
 
         beanFactory.setTempClassLoader((ClassLoader)null);
         beanFactory.freezeConfiguration();
+        //初始化单例对象
         beanFactory.preInstantiateSingletons();
     }
 

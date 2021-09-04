@@ -3,6 +3,7 @@ package org.liuzhugu.javastudy.framestudy.spring.ioc;
 import org.liuzhugu.javastudy.sourcecode.spring.BeanFactory;
 import org.liuzhugu.javastudy.sourcecode.spring.ClassPathXmlApplicationContext;
 import org.liuzhugu.javastudy.sourcecode.spring.ListableBeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -10,6 +11,9 @@ import java.util.Map;
  * 查找bean
  * */
 public class DependencyLookup {
+    @Autowired
+    private User user;
+
     public static void main(String[] args) {
         BeanFactory beanFactory = new ClassPathXmlApplicationContext(
                 "classpath:/spring/META-INF/dependency-lookup.xml");

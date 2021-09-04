@@ -280,6 +280,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         synchronized(mbd.postProcessingLock) {
             if (!mbd.postProcessed) {
                 try {
+                    //对注入元素的预解析
                     this.applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
                 } catch (Throwable var17) {
                     throw new BeanCreationException(mbd.getResourceDescription(), beanName, "Post-processing of merged bean definition failed", var17);
@@ -741,6 +742,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return (new ConstructorResolver(this)).autowireConstructor(beanName, mbd, ctors, explicitArgs);
     }
 
+    // 对属性的注入
     protected void populateBean(String beanName, RootBeanDefinition mbd, BeanWrapper bw) {
         PropertyValues pvs = mbd.getPropertyValues();
         if (bw == null) {
@@ -756,6 +758,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                     BeanPostProcessor bp = (BeanPostProcessor)var6.next();
                     if (bp instanceof InstantiationAwareBeanPostProcessor) {
                         InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor)bp;
+
                         if (!ibp.postProcessAfterInstantiation(bw.getWrappedInstance(), beanName)) {
                             continueWithPropertyPopulation = false;
                             break;

@@ -134,6 +134,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
                     this.afterSingletonCreation(beanName);
                 }
 
+                //获取不到单例就添加
                 if (newSingleton) {
                     this.addSingleton(beanName, singletonObject);
                 }
