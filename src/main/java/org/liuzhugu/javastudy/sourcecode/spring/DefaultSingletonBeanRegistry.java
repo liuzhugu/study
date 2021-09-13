@@ -51,11 +51,17 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
         }
     }
 
+    /**
+     * ￥ 将beanFactory注册到三级缓存
+     * */
     protected void addSingletonFactory(String beanName, ObjectFactory<?> singletonFactory) {
         Assert.notNull(singletonFactory, "Singleton factory must not be null");
         synchronized(this.singletonObjects) {
+            //如果在一级缓存中没有该bean  也就是该bean并未实例化成功
             if (!this.singletonObjects.containsKey(beanName)) {
+                //注册到三级缓存去
                 this.singletonFactories.put(beanName, singletonFactory);
+                //从二级缓存中删除该bean
                 this.earlySingletonObjects.remove(beanName);
                 this.registeredSingletons.add(beanName);
             }
@@ -68,14 +74,18 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
     }
 
     protected Object getSingleton(String beanName, boolean allowEarlyReference) {
+        //从一级缓存中获取
         Object singletonObject = this.singletonObjects.get(beanName);
         if (singletonObject == null && this.isSingletonCurrentlyInCreation(beanName)) {
             synchronized(this.singletonObjects) {
+                //获取不到  那么从二级缓存中获取
                 singletonObject = this.earlySingletonObjects.get(beanName);
                 if (singletonObject == null && allowEarlyReference) {
+                    //还是获取不到  从三级缓存中获取  然后创建原型bean
                     ObjectFactory<?> singletonFactory = (ObjectFactory)this.singletonFactories.get(beanName);
                     if (singletonFactory != null) {
                         singletonObject = singletonFactory.getObject();
+                        //放入二级缓存中
                         this.earlySingletonObjects.put(beanName, singletonObject);
                         this.singletonFactories.remove(beanName);
                     }

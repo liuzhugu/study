@@ -229,9 +229,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     protected Object createBean(String beanName, RootBeanDefinition mbd, Object[] args) throws BeanCreationException {
-        if (this.logger.isDebugEnabled()) {
-            this.logger.debug("Creating instance of bean '" + beanName + "'");
-        }
 
         RootBeanDefinition mbdToUse = mbd;
         Class<?> resolvedClass = this.resolveBeanClass(mbd, beanName, new Class[0]);
@@ -264,6 +261,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return beanInstance;
     }
 
+    /**
+     * ￥ 创建bean的过程
+     * */
     protected Object doCreateBean(final String beanName, final RootBeanDefinition mbd, Object[] args) throws BeanCreationException {
         BeanWrapper instanceWrapper = null;
         if (mbd.isSingleton()) {
@@ -292,10 +292,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
         boolean earlySingletonExposure = mbd.isSingleton() && this.allowCircularReferences && this.isSingletonCurrentlyInCreation(beanName);
         if (earlySingletonExposure) {
-            if (this.logger.isDebugEnabled()) {
-                this.logger.debug("Eagerly caching bean '" + beanName + "' to allow for resolving potential circular references");
-            }
-
+            //将beanFactory注册到三级缓存去
             this.addSingletonFactory(beanName, new ObjectFactory<Object>() {
                 public Object getObject() throws BeansException {
                     return AbstractAutowireCapableBeanFactory.this.getEarlyBeanReference(beanName, mbd, bean);
@@ -306,6 +303,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         Object exposedObject = bean;
 
         try {
+            //属性注入  如果依赖其他bean  那么级联处理
             this.populateBean(beanName, mbd, instanceWrapper);
             if (exposedObject != null) {
                 exposedObject = this.initializeBean(beanName, exposedObject, mbd);
@@ -771,6 +769,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 if (mbd.getResolvedAutowireMode() == 1 || mbd.getResolvedAutowireMode() == 2) {
                     MutablePropertyValues newPvs = new MutablePropertyValues((PropertyValues)pvs);
                     if (mbd.getResolvedAutowireMode() == 1) {
+                        //￥ 获取依赖的bean   从而触发其初始化
                         this.autowireByName(beanName, mbd, bw, newPvs);
                     }
 
@@ -821,11 +820,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 Object bean = this.getBean(propertyName);
                 pvs.add(propertyName, bean);
                 this.registerDependentBean(propertyName, beanName);
-                if (this.logger.isDebugEnabled()) {
-                    this.logger.debug("Added autowiring by name from bean name '" + beanName + "' via property '" + propertyName + "' to bean named '" + propertyName + "'");
-                }
-            } else if (this.logger.isTraceEnabled()) {
-                this.logger.trace("Not autowiring property '" + propertyName + "' of bean '" + beanName + "' by name: no matching bean found");
+
             }
         }
 

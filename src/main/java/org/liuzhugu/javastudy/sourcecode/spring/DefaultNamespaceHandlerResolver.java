@@ -70,9 +70,6 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
                 if (this.handlerMappings == null) {
                     try {
                         Properties mappings = PropertiesLoaderUtils.loadAllProperties(this.handlerMappingsLocation, this.classLoader);
-                        if (this.logger.isDebugEnabled()) {
-                            this.logger.debug("Loaded NamespaceHandler mappings: " + mappings);
-                        }
 
                         Map<String, Object> handlerMappings = new ConcurrentHashMap(mappings.size());
                         CollectionUtils.mergePropertiesIntoMap(mappings, handlerMappings);
@@ -84,6 +81,7 @@ public class DefaultNamespaceHandlerResolver implements NamespaceHandlerResolver
             }
         }
 
+        this.handlerMappings.put("http://www.springframework.org/schema/aop","org.liuzhugu.javastudy.sourcecode.spring.AopNamespaceHandler");
         return this.handlerMappings;
     }
 

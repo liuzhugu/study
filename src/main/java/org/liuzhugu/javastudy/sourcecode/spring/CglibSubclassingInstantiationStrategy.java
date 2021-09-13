@@ -2,13 +2,10 @@ package org.liuzhugu.javastudy.sourcecode.spring;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.liuzhugu.javastudy.sourcecode.spring.aop.MethodInterceptor;
 import org.springframework.beans.BeanInstantiationException;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.support.*;
-import org.springframework.beans.factory.support.MethodOverride;
-import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.cglib.core.ClassGenerator;
 import org.springframework.cglib.core.DefaultGeneratorStrategy;
 import org.springframework.cglib.core.SpringNamingPolicy;
@@ -26,18 +23,18 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
     public CglibSubclassingInstantiationStrategy() {
     }
 
-    protected Object instantiateWithMethodInjection(org.springframework.beans.factory.support.RootBeanDefinition bd, String beanName, org.springframework.beans.factory.BeanFactory owner) {
+    protected Object instantiateWithMethodInjection(RootBeanDefinition bd, String beanName, BeanFactory owner) {
         return this.instantiateWithMethodInjection(bd, beanName, owner, (Constructor)null);
     }
 
-    protected Object instantiateWithMethodInjection(org.springframework.beans.factory.support.RootBeanDefinition bd, String beanName, org.springframework.beans.factory.BeanFactory owner, Constructor<?> ctor, Object... args) {
+    protected Object instantiateWithMethodInjection(RootBeanDefinition bd, String beanName, BeanFactory owner, Constructor<?> ctor, Object... args) {
         return (new CglibSubclassingInstantiationStrategy.CglibSubclassCreator(bd, owner)).instantiate(ctor, args);
     }
 
-    private static class ReplaceOverrideMethodInterceptor extends CglibSubclassingInstantiationStrategy.CglibIdentitySupport implements MethodInterceptor {
-        private final org.springframework.beans.factory.BeanFactory owner;
+    private static class ReplaceOverrideMethodInterceptor extends CglibSubclassingInstantiationStrategy.CglibIdentitySupport implements org.liuzhugu.javastudy.sourcecode.spring.aop.MethodInterceptor {
+        private final BeanFactory owner;
 
-        public ReplaceOverrideMethodInterceptor(org.springframework.beans.factory.support.RootBeanDefinition beanDefinition, org.springframework.beans.factory.BeanFactory owner) {
+        public ReplaceOverrideMethodInterceptor(RootBeanDefinition beanDefinition, BeanFactory owner) {
             super(beanDefinition);
             this.owner = owner;
         }
@@ -49,10 +46,10 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
         }
     }
 
-    private static class LookupOverrideMethodInterceptor extends CglibSubclassingInstantiationStrategy.CglibIdentitySupport implements MethodInterceptor {
-        private final org.springframework.beans.factory.BeanFactory owner;
+    private static class LookupOverrideMethodInterceptor extends CglibSubclassingInstantiationStrategy.CglibIdentitySupport implements org.liuzhugu.javastudy.sourcecode.spring.aop.MethodInterceptor {
+        private final BeanFactory owner;
 
-        public LookupOverrideMethodInterceptor(org.springframework.beans.factory.support.RootBeanDefinition beanDefinition, org.springframework.beans.factory.BeanFactory owner) {
+        public LookupOverrideMethodInterceptor(RootBeanDefinition beanDefinition, BeanFactory owner) {
             super(beanDefinition);
             this.owner = owner;
         }
@@ -67,7 +64,7 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
     private static class MethodOverrideCallbackFilter extends CglibSubclassingInstantiationStrategy.CglibIdentitySupport implements CallbackFilter {
         private static final Log logger = LogFactory.getLog(CglibSubclassingInstantiationStrategy.MethodOverrideCallbackFilter.class);
 
-        public MethodOverrideCallbackFilter(org.springframework.beans.factory.support.RootBeanDefinition beanDefinition) {
+        public MethodOverrideCallbackFilter(RootBeanDefinition beanDefinition) {
             super(beanDefinition);
         }
 
@@ -130,13 +127,13 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
     }
 
     private static class CglibIdentitySupport {
-        private final org.springframework.beans.factory.support.RootBeanDefinition beanDefinition;
+        private final RootBeanDefinition beanDefinition;
 
-        public CglibIdentitySupport(org.springframework.beans.factory.support.RootBeanDefinition beanDefinition) {
+        public CglibIdentitySupport(RootBeanDefinition beanDefinition) {
             this.beanDefinition = beanDefinition;
         }
 
-        public org.springframework.beans.factory.support.RootBeanDefinition getBeanDefinition() {
+        public RootBeanDefinition getBeanDefinition() {
             return this.beanDefinition;
         }
 
@@ -151,10 +148,10 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 
     private static class CglibSubclassCreator {
         private static final Class<?>[] CALLBACK_TYPES = new Class[]{NoOp.class, CglibSubclassingInstantiationStrategy.LookupOverrideMethodInterceptor.class, CglibSubclassingInstantiationStrategy.ReplaceOverrideMethodInterceptor.class};
-        private final org.springframework.beans.factory.support.RootBeanDefinition beanDefinition;
-        private final org.springframework.beans.factory.BeanFactory owner;
+        private final RootBeanDefinition beanDefinition;
+        private final BeanFactory owner;
 
-        CglibSubclassCreator(org.springframework.beans.factory.support.RootBeanDefinition beanDefinition, BeanFactory owner) {
+        CglibSubclassCreator(RootBeanDefinition beanDefinition, BeanFactory owner) {
             this.beanDefinition = beanDefinition;
             this.owner = owner;
         }

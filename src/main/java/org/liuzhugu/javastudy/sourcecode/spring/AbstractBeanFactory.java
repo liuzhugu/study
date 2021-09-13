@@ -65,20 +65,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
         Object sharedInstance = this.getSingleton(beanName);
         Object bean;
         if (sharedInstance != null && args == null) {
-            if (this.logger.isDebugEnabled()) {
-                if (this.isSingletonCurrentlyInCreation(beanName)) {
-                    this.logger.debug("Returning eagerly cached instance of singleton bean '" + beanName + "' that is not fully initialized yet - a consequence of a circular reference");
-                } else {
-                    this.logger.debug("Returning cached instance of singleton bean '" + beanName + "'");
-                }
-            }
 
             bean = this.getObjectForBeanInstance(sharedInstance, name, beanName, (RootBeanDefinition)null);
         } else {
             if (this.isPrototypeCurrentlyInCreation(beanName)) {
                 throw new BeanCurrentlyInCreationException(beanName);
             }
-
+            //从上一级beanFactory获取
             BeanFactory parentBeanFactory = this.getParentBeanFactory();
             if (parentBeanFactory != null && !this.containsBeanDefinition(beanName)) {
                 String nameToLookup = this.originalBeanName(name);
@@ -94,6 +87,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
             }
 
             try {
+                //获取bean的定义
                 final RootBeanDefinition mbd = this.getMergedLocalBeanDefinition(beanName);
                 this.checkMergedBeanDefinition(mbd, beanName, args);
                 String[] dependsOn = mbd.getDependsOn();

@@ -7,14 +7,14 @@ import com.dingtalk.api.response.*;
 import com.taobao.api.ApiException;
 
 public class DingdingApi {
-    private static final String accessToken = "aefebf1defe93d6cbd82ba93321ba8a1";
+    private static final String accessToken = "6b5f3d631b23322bbf3fc4bb7976d271";
 
     public static void main(String[] args) {
         //getToken();
         //getRange();
-        getUserInfo("0106673448181291257");
+        //getUserInfo("0106673448181291257");
         //getUserList(500157314);
-        //getDept(489166258);
+        getDept(489166258);
     }
 
     public static void getToken() {
