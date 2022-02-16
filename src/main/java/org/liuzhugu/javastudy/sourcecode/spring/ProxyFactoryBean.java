@@ -117,6 +117,10 @@ public class ProxyFactoryBean extends ProxyCreatorSupport implements FactoryBean
         return ClassUtils.createCompositeInterface(interfaces, this.proxyClassLoader);
     }
 
+    /**
+     * 获取bean时   一路走到这里
+     * ￥ 获取切面增强后的Bean
+     * */
     private synchronized Object getSingletonInstance() {
         if (this.singletonInstance == null) {
             this.targetSource = this.freshTargetSource();

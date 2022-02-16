@@ -20,7 +20,6 @@ public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
                 throw new AopConfigException("TargetSource cannot determine target class: Either an interface or a target is required for proxy creation.");
             } else {
                 //mustWatch 决定是用JDK动态代理还是Cglib
-                //return (AopProxy)(!targetClass.isInterface() && !Proxy.isProxyClass(targetClass) ? new ObjenesisCglibAopProxy(config) : new JdkDynamicAopProxy(config));
                 return (AopProxy)(!targetClass.isInterface() && !Proxy.isProxyClass(targetClass) ? new ObjenesisCglibAopProxy(config) : new JdkDynamicAopProxy(config));
             }
         }
