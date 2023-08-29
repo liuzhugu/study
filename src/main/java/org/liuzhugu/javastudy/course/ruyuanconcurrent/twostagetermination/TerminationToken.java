@@ -57,9 +57,13 @@ public class TerminationToken {
         WeakReference<Termination> wrThread;
         Termination otherThread;
 
+        //把注册到标记上的所有工作者线程取出  逐一终止
         while ((wrThread = coordinatedThreads.poll()) != null) {
             otherThread = wrThread.get();
-            if (otherThread != null && otherThread != thread) {
+            if (otherThread != null &&
+                    //当前线程正在执行  不能终止  只能终止其他
+                    //然后当前线程本来就要终止  因此将其他线程终止后  本线程自然结束
+                    otherThread != thread) {
                 otherThread.terminate();
             }
         }

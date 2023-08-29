@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="biz" class="org.liuzhugu.javastudy.framestudy.spring.aop.impl.BizImpl"/>
+
+    <!--配置advice-->
+    <bean id="beforeAdvice" class="org.liuzhugu.javastudy.framestudy.spring.aop.BeforeAdvice"/>
+    <bean id="arroundAdvice" class="org.liuzhugu.javastudy.framestudy.spring.aop.ArroundAdvice"/>
+
+    <bean id="dosome" class="org.liuzhugu.javastudy.framestudy.spring.aop.impl.BizImpl"/>
+
+    <bean id="proxyFactoryBean" class="org.liuzhugu.javastudy.sourcecode.spring.ProxyFactoryBean">
+        <property name="interceptorNames" value="beforeAdvice,arroundAdvice"/>
+        <property name="target" ref="biz"/>
+    </bean>
+
+    <!--    &lt;!&ndash;配置Pointcut&ndash;&gt;-->
+    <!--    <aop:config>-->
+    <!--        &lt;!&ndash;要被切入的方法&ndash;&gt;-->
+    <!--        <aop:pointcut id="doMethods" expression="execution(* org.liuzhugu.javastudy.framestudy.spring.aop.impl.*.help(..))"/>-->
+    <!--        &lt;!&ndash;切面&ndash;&gt;-->
+    <!--        &lt;!&ndash;<aop:advisor advice-ref="beforeAdvice" pointcut-ref="doMethods"/>&ndash;&gt;-->
+    <!--        <aop:advisor advice-ref="arroundAdvice" pointcut="execution(* org.liuzhugu.javastudy.framestudy.spring.aop.impl.*.service(..))"/>-->
+    <!--    </aop:config>-->
+</beans>

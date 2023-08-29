@@ -1,38 +1,62 @@
 package org.liuzhugu.javastudy.practice.za;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+
+import javax.annotation.Resource;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.jcajce.provider.symmetric.AES;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class Za {
-    public static void main(String[] args) {
-        test(898.1667,24.0);
+
+    // 解密
+    public static String Decrypt(String sSrc, String sKey) throws Exception {
+        try {
+            // 判断Key是否正确
+            if (sKey == null) {
+                System.out.print("Key为空null");
+                return null;
+            }
+            // 判断Key是否为16位
+            if (sKey.length() != 16) {
+                System.out.print("Key长度不是16位");
+                return null;
+            }
+            byte[] raw = sKey.getBytes("utf-8");
+            SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+            byte[] encrypted1 = new Base64().decode(sSrc);//先用base64解密
+            try {
+                byte[] original = cipher.doFinal(encrypted1);
+                String originalString = new String(original,"utf-8");
+                return originalString;
+            } catch (Exception e) {
+                System.out.println(e.toString());
+                return null;
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+            return null;
+        }
     }
 
-    private static void test(double arg1,double arg2) {
-        String arg11 = arg1+"";
-        String arg22 = arg2+"";
-        int m = 0;
-        try{
-            m+=arg11.split("\\.")[1].length();
-            System.out.println(m);
-        }catch(Exception e){
-            System.out.println("计算出错");
-        }
-        try{
-            m+=arg22.split("\\.")[1].length();
-            System.out.println(m);
-        }catch(Exception e){
-            System.out.println("计算出错");
-        }
-        System.out.println(8981667 * 240);
-        double dealerAmount = Integer.parseInt(arg11.replace(".",""))*Integer.parseInt(arg22.replace(".",""))/Math.pow(10,m);
-        System.out.println(dealerAmount);
-        System.out.println(BigDecimal.valueOf(21556.00).setScale(2, RoundingMode.HALF_UP).compareTo(BigDecimal.valueOf(dealerAmount).setScale(2, RoundingMode.HALF_UP))!= 0);
-
-        BigDecimal first = BigDecimal.valueOf(arg1);
-        BigDecimal second = BigDecimal.valueOf(arg2);
-        dealerAmount =first.multiply(second).doubleValue();
-        System.out.println(dealerAmount);
-        System.out.println(BigDecimal.valueOf(21556.00).setScale(2, RoundingMode.HALF_UP).compareTo(BigDecimal.valueOf(dealerAmount).setScale(2, RoundingMode.HALF_UP))!= 0);
+    public static void main(String[] args) throws Exception {
+        String str = "刘注孤";
+        String name = str.substring(0,1) + "*" + str.substring(2);
+        System.out.println(name);
     }
+
 }

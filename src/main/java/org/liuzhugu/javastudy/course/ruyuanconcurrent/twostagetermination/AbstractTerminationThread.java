@@ -1,7 +1,5 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination;
 
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * 终端线程的抽象类
@@ -41,7 +39,8 @@ public abstract class AbstractTerminationThread extends Thread implements Termin
                     break;
                 }
 
-                //执行具体的业务逻辑
+                //除非检测到线程要退出
+                // 否则死循环执行具体的业务逻辑
                 doRun();
             }
         } catch (Exception e) {

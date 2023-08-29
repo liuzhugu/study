@@ -1,7 +1,7 @@
 package org.liuzhugu.javastudy.course.ruyuanconcurrent.masterslave;
 
 import com.alibaba.fastjson.JSON;
-import org.liuzhugu.javastudy.course.ruyuanconcurrent.twostagetermination.AbstractTerminationThread;
+import org.liuzhugu.javastudy.course.ruyuanconcurrent.pipeline.AbstractTerminationThread;
 
 import java.io.BufferedReader;
 import java.util.Objects;
@@ -24,7 +24,8 @@ public class Worker extends AbstractTerminationThread {
      * */
     private final BlockingQueue<BufferedReader> workQueue;
 
-    public Worker(ConcurrentMap<Long, AtomicInteger> hotCommodityMap) {
+    public Worker(String threadName,ConcurrentMap<Long, AtomicInteger> hotCommodityMap) {
+        super(threadName);
         this.hotCommodityMap = hotCommodityMap;
         workQueue = new ArrayBlockingQueue<>(100);
     }
