@@ -20,6 +20,7 @@ public class CallManage {
         if (this.callMap == null) {
             this.callMap = new HashMap<>();
         }
+
         //判断是否该任务已经有线程在执行了
         Call call = this.callMap.get(key);
         //如果已经有了  那么阻塞等待其完成  然后获取结果
